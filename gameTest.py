@@ -65,6 +65,12 @@ class TestGame(unittest.TestCase):
     
     def test_printGameState(self):
         self.game.printGameState()
+    
+    def test_getAdjacent(self):
+        print(f"(0, 0)'s adjacent is {self.game.getAdjacent(0, 0)}")
+        print(f"(4, 5)'s adjacent is {self.game.getAdjacent(4, 5)}")
+        print(f"(7, 4)'s adjacent is {self.game.getAdjacent(7, 4)}")
+        
 
 if __name__ == "__main__":
     unittest.main()

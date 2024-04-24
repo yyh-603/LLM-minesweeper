@@ -195,7 +195,7 @@ class Map:
         '''
         Check if the position is valid
         '''
-        return 0 <= x < self.height and 0 <= y < self.width
+        return 0 <= x and x < self.height and 0 <= y and y < self.width
 
     def getWidth(self):
         return self.width
@@ -208,6 +208,16 @@ class Map:
     
     def getSize(self):
         return self.height, self.width
+
+    def getAdjacent(self, x, y):
+        if not self.validPos(x, y):
+            raise ValueError('(x, y) is not a valid position.')
+        ret = []
+        for i in range(x - 1, x + 2):
+            for j in range(y - 1, y + 2):
+                if self.validPos(i, j) and (i, j) != (x, y):
+                    ret.append((i, j))
+        return ret
 
     def gridFormat(self):
         ret = ""
@@ -374,6 +384,9 @@ class Game:
             print('Win')
         elif self.state == GameState.LOSE:
             print('Lose')
+
+    def getAdjacent(self, x, y):
+        return self.map.getAdjacent(x, y)
 
 if __name__ == '__main__':
     mp = Map(8, 10, 10)
