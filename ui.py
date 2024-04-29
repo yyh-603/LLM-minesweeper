@@ -2,52 +2,53 @@ import tkinter as tk
 from game import Game, GameState
 
 class MinesweeperUI:
-    def __init__(self, game):
+    def __init__(self, game: Game):
         self.game = game
         self.window = tk.Tk()
         self.window.title("Minesweeper")
-        self.buttons = [[None for _ in range(game.map.width)] for _ in range(game.map.height)]
-        for i in range(game.map.height):
-            for j in range(game.map.width):
+        self.buttons = [[None for _ in range(game.getWidth())] for _ in range(game.getHeight())]
+        for i in range(game.getHeight()):
+            for j in range(game.getWidth()):
                 self.buttons[i][j] = tk.Button(self.window, command=lambda x=i, y=j: self.open_cell(x, y), width=2, height=1)
                 self.buttons[i][j].grid(row=i, column=j)
         
-        for i in range(game.map.height):
-            for j in range(game.map.width):
+        for i in range(game.getHeight()):
+            for j in range(game.getWidth()):
                 self.buttons[i][j] = tk.Button(self.window, command=lambda x=i, y=j: self.open_cell(x, y), width=2, height=1)
                 self.buttons[i][j].grid(row=i, column=j)
                 self.buttons[i][j].bind('<Button-3>', lambda event, x=i, y=j: self.toggle_flag(x, y))
 
     def open_cell(self, x, y):
         self.game.openCell(x, y)
+        print(x, y)
         self.update_buttons()
-        if self.game.state == GameState.WIN:
+        if self.game.checkWin():
             print("You win!")
-        elif self.game.state == GameState.LOSE:
+        elif self.game.checkLose():
             print("You lose!")
     
     def toggle_flag(self, x, y):
-        if self.game.map.map[x][y].hasFlag:
+        if self.game.getCellHasFlag(x, y):
             self.game.removeFlag(x, y)
         else:
             self.game.setFlag(x, y)
         self.update_buttons()
 
     def update_buttons(self):
-        for i in range(self.game.map.height):
-            for j in range(self.game.map.width):
-                if self.game.map.map[i][j].isOpen:
-                    if self.game.map.map[i][j].data == -1:
+        for i in range(self.game.getHeight()):
+            for j in range(self.game.getWidth()):
+                if self.game.getCellIsOpen(i, j):
+                    if self.game.getCellData(i, j) == -1:
                         self.buttons[i][j].config(text="X", state="disabled")
                     else:
-                        self.buttons[i][j].config(text=str(self.game.map.map[i][j].data), state="disabled")
+                        self.buttons[i][j].config(text=str(self.game.getCellData(i, j)), state="disabled")
 
-                elif self.game.map.map[i][j].hasFlag:
+                elif self.game.getCellHasFlag(i, j):
                     self.buttons[i][j].config(text="F")
                 
                 else:
                     self.buttons[i][j].config(text="", state="normal")
-        print(self.game.map.gridFormat())
+        self.game.printMap()
 
     def run(self):
         self.window.mainloop()

@@ -10,7 +10,7 @@ class TestGame(unittest.TestCase):
         self.assertEqual(self.game.getHeight(), 8)
         self.assertEqual(self.game.getMinesNum(), 10)
         self.assertEqual(self.game.getSize(), (8, 10))
-        self.assertEqual(self.game.state, GameState.PLAYING)
+        self.assertEqual(self.game.gameState, GameState.PLAYING)
 
     def test_openCell(self):
         self.assertTrue(self.game.openCell(0, 0))

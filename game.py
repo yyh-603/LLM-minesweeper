@@ -35,18 +35,26 @@ class Cell:
     def getHasFlag(self):
         return self.hasFlag
 
-class Map:
+class GameState(Enum):
+    PLAYING = 0
+    WIN = 1
+    LOSE = 2
+
+class Game:
     def __init__(self, height, width, minesNum):
         self.width = width
         self.height = height
         self.map = []
         self.minesNum = minesNum
+        self.gameState = GameState.PLAYING
         self.generateMap()
 
     def generateMap(self):
         '''
         Generate the map with mines and numbers
         '''
+        if self.minesNum > self.width * self.height:
+            raise ValueError('The number of mines is greater than the number of cells.')
         # Initialize the map
         self.map = [[Cell(0) for i in range(self.width)] for j in range(self.height)]
         # Place the mines
@@ -63,21 +71,6 @@ class Map:
                     if 0 <= x + k < self.height and 0 <= y + j < self.width and self.map[x + k][y + j].data != -1:
                         self.map[x + k][y + j].data += 1
     
-    def printMap(self):
-        '''
-        Print the map
-        '''
-        for i in range(self.height):
-            for j in range(self.width):
-                if not self.map[i][j].isOpen and not self.map[i][j].hasFlag:
-                    print('O', end=' ')
-                elif not self.map[i][j].isOpen and self.map[i][j].hasFlag:
-                    print('F', end=' ')
-                elif self.map[i][j].data == -1:
-                    print('X', end=' ')
-                else:
-                    print(self.map[i][j].data, end=' ')
-            print()
     
     def openCell(self, x, y):
         '''
@@ -85,6 +78,9 @@ class Map:
         - x: x coordinate of the cell
         - y: y coordinate of the cell
         '''
+        # print(x, y)
+        if self.gameState != GameState.PLAYING:
+            return False
         if self.map[x][y].isOpen:
             return False
         if self.map[x][y].hasFlag:
@@ -103,6 +99,8 @@ class Map:
         - x: x coordinate of the cell
         - y: y coordinate of the cell
         '''
+        if self.gameState != GameState.PLAYING:
+            return False
         if self.map[x][y].isOpen:
             return False
         if self.map[x][y].hasFlag:
@@ -116,6 +114,8 @@ class Map:
         - x: x coordinate of the cell
         - y: y coordinate of the cell
         '''
+        if self.gameState != GameState.PLAYING:
+            return False
         if self.map[x][y].isOpen:
             return False
         if not self.map[x][y].hasFlag:
@@ -179,6 +179,7 @@ class Map:
             for j in range(self.width):
                 if not self.map[i][j].isOpen and self.map[i][j].data != -1:
                     return False
+        self.gameState = GameState.WIN
         return True
 
     def checkLose(self):
@@ -188,6 +189,7 @@ class Map:
         for i in range(self.height):
             for j in range(self.width):
                 if self.map[i][j].isOpen and self.map[i][j].data == -1:
+                    self.gameState = GameState.LOSE
                     return True
         return False
 
@@ -257,137 +259,23 @@ class Map:
                 ret += tmp + '\n'
         return ret
 
-class GameState(Enum):
-    PLAYING = 0
-    WIN = 1
-    LOSE = 2
-
-class Game:
-    def __init__(self, height, width, minesNum):
-        self.map = Map(height, width, minesNum)
-        self.state = GameState.PLAYING
-    
-    def openCell(self, x, y):
-        '''
-        Open a cell
-        - x: x coordinate of the cell
-        - y: y coordinate of the cell
-        '''
-        if self.state != GameState.PLAYING:
-            return False
-        ret = self.map.openCell(x, y)
-        if self.map.checkWin():
-            self.state = GameState.WIN
-        if self.map.checkLose():
-            self.state = GameState.LOSE
-        return ret
-    
-    def setFlag(self, x, y):
-        '''
-        Set a flag on the cell
-        - x: x coordinate of the cell
-        - y: y coordinate of the cell
-        '''
-        if self.state != GameState.PLAYING:
-            return False
-        return self.map.setFlag(x, y)
-    
-    def removeFlag(self, x, y):
-        '''
-        Remove the flag on the cell
-        - x: x coordinate of the cell
-        - y: y coordinate of the cell
-        '''
-        if self.state != GameState.PLAYING:
-            return False
-        return self.map.removeFlag(x, y)
-    
-    def getCellData(self, x, y):
-        '''
-        Get the data of the cell
-        - x: x coordinate of the cell
-        - y: y coordinate of the cell
-        '''
-        return self.map.getCellData(x, y)
-
-    def getCellIsOpen(self, x, y):
-        '''
-        Get the isOpen of the cell
-        - x: x coordinate of the cell
-        - y: y coordinate of the cell
-        '''
-        return self.map.getCellIsOpen(x, y)
-
-    def getCellHasFlag(self, x, y):
-        '''
-        Get the hasFlag of the cell
-        - x: x coordinate of the cell
-        - y: y coordinate of the cell
-        '''
-        return self.map.getCellHasFlag(x, y)
-    
-    def getCellDatas(self):
-        '''
-        Get the data of all cells
-        '''
-        return self.map.getCellDatas()
-    
-    def getCellIsOpens(self):
-        '''
-        Get the isOpen of all cells
-        '''
-        return self.map.getCellIsOpens()
-
-    def getCellHasFlags(self):
-        '''
-        Get the hasFlag of all cells
-        '''
-        return self.map.getCellHasFlags()
-    
-    def getMap(self):
-        '''
-        Get the map
-        '''
-        return self.map.getMap()
-    
-    def getWidth(self):
-        return self.map.getWidth()
-    
-    def getHeight(self):
-        return self.map.getHeight()
-    
-    def getSize(self):
-        return self.map.getSize()
-
-    def getMinesNum(self):
-        return self.map.getMinesNum()
-
-    def validPos(self, x, y):
-        '''
-        Check if the position is valid
-        '''
-        return self.map.validPos(x, y)
-
     def printMap(self):
         '''
         Print the map
         '''
-        self.map.printMap()
+        print(self.gridFormat())
     
     def printGameState(self):
         '''
         Print the game state
         '''
-        if self.state == GameState.PLAYING:
+        if self.gameState == GameState.PLAYING:
             print('Playing')
-        elif self.state == GameState.WIN:
+        elif self.gameState == GameState.WIN:
             print('Win')
-        elif self.state == GameState.LOSE:
+        elif self.gameState == GameState.LOSE:
             print('Lose')
 
-    def getAdjacent(self, x, y):
-        return self.map.getAdjacent(x, y)
-
 if __name__ == '__main__':
-    mp = Map(8, 10, 10)
+    mp = Game(9, 9, 10)
     print(mp.gridFormat())
