@@ -1,5 +1,5 @@
 import openai
-from game import Map
+from game import Game
 import os
 
 OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
@@ -18,8 +18,28 @@ class OpenAIAPI:
         pass
 
 
-    def sendMap(self, map):
-        prompt = """
+    def sendMap(self, prompt, map: Game):
+        # print(map.gridFormat())
+        response = self.client.chat.completions.create(
+            model = self.model_type,
+            messages = [
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": map.gridFormat()}
+            ],
+        )
+        return response.choices[0].message.content
+
+    def sendWin():
+        pass
+    
+    def sendLose():
+        pass
+
+if __name__ == '__main__':
+    map = Game(10, 10, 10)
+    api = OpenAIAPI("gpt-3.5-turbo")
+    count = 0
+    prompt = """
 You are a minesweeper player. You are given a map of minesweeper.
 number in the map stands for the number of mines around the cell. "F" stands for flag. "." stands for unknown cell.
 The map is formatted as follows:
@@ -49,28 +69,8 @@ You don't need to output your reason.
 Output format:
 [Action] [x] [y]
 """
-        print(map.gridFormat())
-        response = self.client.chat.completions.create(
-            model = self.model_type,
-            messages = [
-                {"role": "system", "content": prompt},
-                {"role": "user", "content": map.gridFormat()}
-            ],
-        )
-        return response.choices[0].message.content
-
-    def sendWin():
-        pass
-    
-    def sendLose():
-        pass
-
-if __name__ == '__main__':
-    map = Map(10, 10, 10)
-    api = OpenAIAPI("gpt-3.5-turbo")
-    count = 0
     while True:
-        response = api.sendMap(map)
+        response = api.sendMap(prompt, map)
         print(response)
         op, x, y = response.split()
         x = int(x)

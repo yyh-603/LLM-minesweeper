@@ -1,5 +1,5 @@
 import tkinter as tk
-from game import Game, GameState
+from game import Game
 
 class MinesweeperUI:
     def __init__(self, game: Game):
