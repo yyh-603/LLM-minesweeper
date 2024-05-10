@@ -4,8 +4,8 @@ class Agent:
     def __init__():
         pass
     
-    def getAction(game: Game):
+    def getAction(self, game: Game):
         raise NotImplementedError()
 
-    def returnFaliedAction():
+    def returnFaliedAction(self):
         raise NotImplementedError()
