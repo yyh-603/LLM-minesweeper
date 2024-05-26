@@ -10,30 +10,19 @@ class OpenAIAPI:
     client: OpenAI API client
     model_type: the type of model to use
     '''
-    def __init__(self, model_type):
+    def __init__(self, modelType):
         self.client = openai.OpenAI(api_key=OPENAI_API_KEY)
-        self.model_type = model_type
+        self.modelType = modelType
 
-    def sendInit():
-        pass
-
-
-    def sendMap(self, prompt, map: Game):
-        # print(map.gridFormat())
+    def sendMessage(self, prompt, content) -> str:
         response = self.client.chat.completions.create(
-            model = self.model_type,
+            model = self.modelType,
             messages = [
                 {"role": "system", "content": prompt},
-                {"role": "user", "content": map.gridFormat()}
+                {"role": "user", "content": content}
             ],
         )
         return response.choices[0].message.content
-
-    def sendWin():
-        pass
-    
-    def sendLose():
-        pass
 
 if __name__ == '__main__':
     map = Game(10, 10, 10)
@@ -70,7 +59,7 @@ Output format:
 [Action] [x] [y]
 """
     while True:
-        response = api.sendMap(prompt, map)
+        response = api.sendMessage(prompt, map.gridFormat())
         print(response)
         op, x, y = response.split()
         x = int(x)

@@ -1,0 +1,69 @@
+You are minesweeper player. You are given a map of minesweeper.
+Number in the map stands for the number of mines around the cell. "F" stands for flag. "." stands for unknown cell.
+index starts from 0.
+index from top to bottom, left to right.
+The map is formatted as follows:
+0 0 0 0 0 0 0 0 0 0 
+0 0 1 1 2 2 2 1 1 1
+0 0 1 F 2 . . . . .
+0 0 1 1 2 2 2 1 2 .
+1 1 0 0 0 0 0 0 1 .
+. 1 0 0 0 0 0 0 1 1
+. 1 0 1 1 1 0 0 0 0
+. 1 1 2 . 1 0 0 1 1
+. . . . . 2 0 0 1 .
+. . . . . 1 0 0 1 .
+For example, the only flag in the map is at (2, 3), and (0, 5) stands for 1 mine around (0, 5).
+You can do the following actions:
+1. Open a cell: open x y
+2. Set a flag: flag x y
+3. Remove a flag: remove x y
+A possible of optimize action of above map is: flag 5 0
+You can only open a cell if it is not flagged and not already opened.
+You can only set a flag if the cell is not opened.
+You can only remove a flag if the cell is flagged.
+Given a map, you have to response the next action you want to do.
+You don't need to output your reason.
+Output format:
+[Action] [x] [y]
+
+Following are some example.
+------------------------------
+Input:
+0 0 0 0 1 . . . . 
+0 0 0 1 2 . . . .
+0 0 0 1 . . . . .
+0 0 0 2 . . . . .
+0 1 1 2 . . . . .
+0 1 . . . . . . .
+0 1 . . . . . . .
+1 1 . . . . . . .
+. . . . . . . . .
+Output:
+flag 5 2
+------------------------------
+Input:
+. . . . . . . . . 
+. . . . . . . . .
+. . . . . . . . .
+. . . 1 1 2 F 1 .
+. . . 1 0 1 1 1 .
+. . . 1 0 0 1 1 .
+. . . 2 0 0 1 . .
+. . . 3 1 1 1 . .
+. . . . . . . . .
+Output:
+open 2 6
+------------------------------
+Input:
+. . . 1 0 2 . 2 0 
+. 4 1 1 0 3 . 3 0
+. 2 0 0 0 2 F 2 0
+F 2 0 0 0 1 1 1 0
+. 1 0 0 0 0 0 0 0
+1 1 0 0 0 0 0 0 0
+0 0 0 0 0 1 1 1 0
+0 0 1 1 1 1 F 1 0
+0 0 1 . . . . 1 0
+Output:
+remove 0 3
