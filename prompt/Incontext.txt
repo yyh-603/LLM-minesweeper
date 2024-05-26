@@ -1,4 +1,4 @@
-You are a minesweeper player. You are given a map of minesweeper.
+You are minesweeper player. You are given a map of minesweeper.
 Number in the map stands for the number of mines around the cell. "F" stands for flag. "." stands for unknown cell.
 index starts from 0.
 index from top to bottom, left to right.

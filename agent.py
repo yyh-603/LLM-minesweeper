@@ -1,20 +1,17 @@
 from game import Game
 from openaiAPI import OpenAIAPI
+from actionFeedback import ActionFeedback
 
 class Agent:
-    def __init__(self, modelName: str, mapFormatFunc):
+    def __init__(self, modelName: str):
         self.api = OpenAIAPI(modelName)
-        self.mapFormatFunc = mapFormatFunc
 
-    def _readtxt(self, filePath: str) -> str:
-        with open(filePath, 'r') as f:
-            return f.read()
+    def process_response(self, response: str):
+        raise NotImplementedError()
     
     def getAction(self, game: Game):
         raise NotImplementedError()
 
-    def returnFaliedAction(self, game: Game):
+    def returnFalied(self, game: Game, falied_reason: ActionFeedback):
         raise NotImplementedError()
     
-    def returnFailedFormat(self, game: Game):
-        raise NotImplementedError()

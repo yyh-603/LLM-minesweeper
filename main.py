@@ -1,8 +1,7 @@
 from game import Game
-from game import GameState
-from ui import MinesweeperUI
+from openaiAPI import OpenAIAPI
+from IncontextAgent import IncontextAgent
 
-if __name__ == "__main__":
+def main():
     game = Game(9, 9, 10)
-    ui = MinesweeperUI(game)
-    ui.run()
+    agent = IncontextAgent("gpt-3.5-turbo")

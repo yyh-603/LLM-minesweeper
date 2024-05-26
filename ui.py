@@ -55,6 +55,6 @@ class MinesweeperUI:
 
 # Test
 if __name__ == "__main__":
-    game = Game(10, 10, 10)
+    game = Game(9, 9, 10)
     ui = MinesweeperUI(game)
     ui.run()
