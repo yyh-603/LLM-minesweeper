@@ -8,7 +8,7 @@ class IncontextAgent(Agent):
 
     def process_response(self, response: str):
         pattern =  r"REASON: (?P<reason>.*)\nACTION: (?P<action>open|flag) (?P<x>\d+) (?P<y>\d+)"
-        match = re.match(pattern, response)
+        match = re.search(pattern, response, re.DOTALL)
         if match:
             ret = {
                 "reason": match.group("reason"),
