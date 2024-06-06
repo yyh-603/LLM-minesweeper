@@ -79,7 +79,7 @@ TABLE:
 . . . 2 1 1 0 0 0
 . . . . . 2 0 0 0
 . . . . . 2 0 0 0
-REASON: Because the cell at (2, 6) has 1 neighboring mine, and only 1 neighboring cell is not opened, we can know that the cell at (2, 7) is a mine. So we flag it.
+REASON: Because the cell at (2, 6) has 1 neighboring mine, and only 1 neighboring cell is not opened, we can know that the cell at (1, 7) is a mine. So we flag it.
 ACTION: flag 1 7
 """
         return ret
@@ -96,7 +96,7 @@ TABLE:
 0 1 F . . . . . .
 0 1 1 3 . . . . .
 0 0 0 1 . . . . .
-REASON: Because the cell at (5, 2) has 1 neighboring mine, and we kown that the cell at (6, 2) is a mine, we can open the cell at (6, 3) safely.
+REASON: Because the cell at (5, 2) has 1 neighboring mine, and we know that the cell at (6, 2) is a mine, we can open the cell at (6, 3) safely.
 ACTION: open 6 3
 """
         return ret
