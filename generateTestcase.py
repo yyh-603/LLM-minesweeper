@@ -32,7 +32,7 @@ def generateImcompleteMap(height: int, width: int, minesNum: int, randomSelectNu
 
 if __name__ == '__main__':
     
-    dir_path = Path('.\\imcompleteMap')
+    dir_path = Path('.\\incompleteMap')
     if not os.path.isdir(dir_path):
         os.mkdir(dir_path)
 
