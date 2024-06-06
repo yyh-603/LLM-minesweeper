@@ -2,6 +2,7 @@ from game import Game
 from IncontextAgent import IncontextAgent
 from actionFeedback import ActionFeedback
 from probability import ProbabilityCalculator
+from CoTAgent import CoTAgent
 
 FORMAT_ERROR_THRESHOLD = 5
 LOGIC_ERROR_THRESHOLD = 5
@@ -17,7 +18,7 @@ def main():
                 game.openCell(i, j)
                 break
 
-    agent = IncontextAgent("gpt-4o")
+    agent = CoTAgent("gpt-3.5-turbo", 3)
     format_error_count = 0
     logic_error_count = 0
     valid_open_count = 0
@@ -42,10 +43,7 @@ def main():
             break
 
         game.printMap()
-        if last_error is not None:
-            valid, action, pos = agent.returnFalied(game, last_error)
-        else:
-            valid, action, pos = agent.getAction(game)
+        valid, action, pos = agent.getAction(game, last_error)
 
         if not valid:
             print("Format error")
@@ -80,6 +78,7 @@ def main():
                 prob_gen.run()
                 valid_open_rate *= prob_gen.getSingleProb(x, y)
                 game.openCell(x, y)
+                last_error = None
 
         
         if action == "flag":
@@ -93,6 +92,7 @@ def main():
                     game.removeFlag(x, y)
                 else:
                     game.setFlag(x, y)
+                last_error = None
         
     print(f"valid open count: {valid_open_count}.")
     print(f"valid open rate: {valid_open_rate}.")

@@ -7,12 +7,13 @@ import re
 
 class CoTAgent(Agent):
 
-    def __init__(self, CoTCount):
+    def __init__(self, model_name, CoTCount):
+        super().__init__(model_name)
         self.CoTCount = CoTCount
     
     def _process_response(self, response: str):
         pattern =  r"REASON: (?P<reason>.*)\nACTION: (?P<action>open|flag) (?P<x>\d+) (?P<y>\d+)"
-        match = re.match(pattern, response)
+        match = re.search(pattern, response, re.DOTALL)
         if match:
             ret = {
                 "reason": match.group("reason"),
@@ -26,7 +27,7 @@ class CoTAgent(Agent):
     
     def _process_continue_response(self, response: str):
         pattern =  r"CORRECTION REASON: (?P<reason>.*)\nCORRECTION ACTION: (?P<action>open|flag) (?P<x>\d+) (?P<y>\d+)"
-        match = re.match(pattern, response)
+        match = re.search(pattern, response, re.DOTALL)
         if match:
             ret = {
                 "reason": match.group("reason"),
@@ -55,6 +56,8 @@ class CoTAgent(Agent):
         first_prompt += promptgen.response_guide(game, falied_reason)
         response = self.api.sendMessage(promptgen.system_message(), first_prompt)
         
+        # print(f'first response: {response}')
+
         valid, response = self._process_response(response)
         if not valid:
             return False, None, None
@@ -71,6 +74,7 @@ class CoTAgent(Agent):
             continue_prompt += promptgen.continue_example_3()
             continue_prompt += promptgen.continue_response_guide(game, reason, action, x, y)
             response = self.api.sendMessage(promptgen.system_message(), continue_prompt)
+            # print(f'continue response {_}: {response}')
 
             valid, response = self._process_continue_response(response)
             if not valid:

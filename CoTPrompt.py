@@ -6,12 +6,13 @@ class CoTPrompt(IncontextPrompt):
         ret = f"""---RESPONSE GUIDE---
 According to the current game state, exisiting reason and action, please judge the existing action is good or not.
 Give your reason in "CORRECTION REASON:" part, and your action after corrected in "CORRECTION ACTION:" part.
-Notice that the action may contain invalid action.
+If the existing action is incorrect, please give another correct action.
 TABLE:
 {grid}
 REASON: {reason}
 ACTION: {action} {x} {y}
 """
+        return ret
         
     def continue_example_1(self):
         ret = f"""---MINESWEEPER EXAMPLE 1---
