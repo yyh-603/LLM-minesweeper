@@ -7,3 +7,4 @@ class ActionFeedback(Enum):
     OPEN_NUMBER_CELL = 3
     OPEN_FLAGGED_CELL = 4
     FLAG_NUMBER_CELL = 5
+    GAME_HAS_ENDED = 6

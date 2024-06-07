@@ -32,19 +32,20 @@ class ProbabilityCalculator:
         self.current_have_mine = []
         self.total_state_num = 0
         self.cnt_not_open = 0
+        self.run()
     
     def run(self):
         self.cnt_not_open = 0
-        self.prob = [[0 for _ in range(self.height)] for _ in range(self.width)]
-        self.current_mine_data = [[0 for _ in range(self.height)] for _ in range(self.width)]
-        for x in range(self.width):
-            for y in range(self.height):
+        self.prob = [[0 for _ in range(self.width)] for _ in range(self.height)]
+        self.current_mine_data = [[0 for _ in range(self.width)] for _ in range(self.height)]
+        for x in range(self.height):
+            for y in range(self.width):
                 if not self.game.getCellIsOpen(x, y):
                     self.cnt_not_open += 1
                     have_open_cell = False #check whether any opened cell nearby
                     for i in range(-1, 2):
                         for j in range(-1, 2):
-                            if x + i >= 0 and x + i < self.width and y + j >= 0 and y + j < self.height and self.game.getCellIsOpen(x + i, y + j):
+                            if x + i >= 0 and x + i < self.height and y + j >= 0 and y + j < self.width and self.game.getCellIsOpen(x + i, y + j):
                                 have_open_cell = True
                                 break
                     
@@ -57,13 +58,13 @@ class ProbabilityCalculator:
         self.total_state_num = 0
         self.current_have_mine = [False for _ in range(len(self.need_check_cell))]
         self._recur_count(self.game.getMinesNum())
-        for x in range(self.width):
-            for y in range(self.height):
+        for x in range(self.height):
+            for y in range(self.width):
                 self.prob[x][y] = (1 - self.prob[x][y] / self.total_state_num)
     
     
     def getSingleProb(self, x, y):
-        if x < 0 or x >= self.width or y < 0 or y >= self.height :
+        if x < 0 or x >= self.height or y < 0 or y >= self.width :
             raise ValueError('x or y is out of range')
         return self.prob[x][y]
     
@@ -80,8 +81,8 @@ class ProbabilityCalculator:
             if left_mines > no_touch_size:
                 return
             
-            for x in range(self.width):
-                for y in range(self.height):
+            for x in range(self.height):
+                for y in range(self.width):
                     if self.game.getCellIsOpen(x, y) and self.game.getCellData(x, y) != self.current_mine_data[x][y]:
                         return
             
@@ -134,11 +135,11 @@ class ProbabilityCalculator:
         self._recur_count(mines_num, idx + 1)
     
     def _inRange(self, x, y):
-        return (x >= 0 and x < self.width and y >= 0 and y < self.height)
+        return (x >= 0 and x < self.height and y >= 0 and y < self.width)
          
 
 if __name__ == '__main__':
-    width = 10
+    width = 8
     height = 10
     mine_num = 9
     

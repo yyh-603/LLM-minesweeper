@@ -1,7 +1,6 @@
 import random
 from enum import Enum
-import unittest
-
+from actionFeedback import ActionFeedback
 
 class Cell:
     def __init__(self, data):
@@ -78,20 +77,28 @@ class Game:
         - x: x coordinate of the cell
         - y: y coordinate of the cell
         '''
-        # print(x, y)
-        if self.gameState != GameState.PLAYING:
-            return False
-        if self.map[x][y].isOpen:
-            return False
-        if self.map[x][y].hasFlag:
-            return False
+        if self.isValidAction(x, y) != ActionFeedback.SUCCESS:
+            return self.isValidAction(x, y)
+        
         self.map[x][y].open()
         if self.map[x][y].data == 0:
             for j in range(-1, 2):
                 for k in range(-1, 2):
                     if 0 <= x + k < self.height and 0 <= y + j < self.width:
                         self.openCell(x + k, y + j)
-        return True
+        return ActionFeedback.SUCCESS
+    
+    def isValidAction(self, x, y):
+        if not self.validPos(x, y):
+            return ActionFeedback.INVALID_CELL
+        if self.gameState != GameState.PLAYING:
+            return ActionFeedback.GAME_HAS_ENDED
+        if self.map[x][y].isOpen:
+            return ActionFeedback.OPEN_NUMBER_CELL
+        if self.map[x][y].hasFlag:
+            return ActionFeedback.OPEN_FLAGGED_CELL
+        return ActionFeedback.SUCCESS
+
 
     def setFlag(self, x, y):
         '''
@@ -137,6 +144,11 @@ class Game:
         - x: x coordinate of the cell
         - y: y coordinate of the cell
         '''
+        try: 
+            isOpen = self.map[x][y].isOpen
+        except Exception as e:
+            print(f'{x} {y}')
+            print(e)
         return self.map[x][y].isOpen
     
     def getCellHasFlag(self, x, y):
@@ -278,4 +290,6 @@ class Game:
 
 if __name__ == '__main__':
     mp = Game(9, 9, 10)
+    
+    print(mp.openCell(5, 5))
     print(mp.gridFormat())
