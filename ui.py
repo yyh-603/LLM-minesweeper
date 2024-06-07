@@ -28,10 +28,10 @@ class MinesweeperUI:
             print("You lose!")
     
     def toggle_flag(self, x, y):
-        if self.game.getCellHasFlag(x, y):
-            self.game.removeFlag(x, y)
-        else:
-            self.game.setFlag(x, y)
+        # if self.game.getCellHasFlag(x, y):
+        #     self.game.removeFlag(x, y)
+        # else:
+        self.game.setFlag(x, y)
         self.update_buttons()
 
     def update_buttons(self):

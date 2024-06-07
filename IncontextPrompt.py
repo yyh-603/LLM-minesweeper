@@ -119,8 +119,10 @@ ACTION: open 6 1
         return ret
 
     def response_guide(self, game, feedback):
-        feedback_str = self.feedback[feedback] if feedback is not None else ""
-        feedback_str = f"NOTICE: {feedback_str}" if feedback_str else ""
+        if feedback is not None or feedback != ActionFeedback.SUCCESS:
+            feedback_str = f"NOTICE: {self.feedback[feedback]}"
+        else:
+            feedback_str = ""
         grid = game.gridFormat()
         ret = f"""---RESPONSE GUIDE---
 Let's think step by step.

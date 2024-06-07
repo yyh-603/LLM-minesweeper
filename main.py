@@ -1,31 +1,91 @@
-from game import Game
+from AnalysisGame import AnalysisGame
 from IncontextAgent import IncontextAgent
 from actionFeedback import ActionFeedback
 from probability import ProbabilityCalculator
 from CoTAgent import CoTAgent
+import argparse
 
-FORMAT_ERROR_THRESHOLD = 5
-LOGIC_ERROR_THRESHOLD = 5
-GAME_WIDTH = 9
-GAME_HEIGHT = 9
-MINE_NUM = 10
+def get_argument():
+    opt = argparse.ArgumentParser()
+    opt.add_argument("--model_name",
+                        type=str,
+                        required=True,
+                        help="model name")
+    opt.add_argument("--test_type",
+                        type=str,
+                        choices=['Incontext', 'CoT'],
+                        required=True,
+                        help="test type")
+    opt.add_argument("--CoTCount",
+                        type=int,
+                        required=False,
+                        help="CoT count")
+    opt.add_argument("--height",
+                        type=int,
+                        required=False,
+                        help="height of the game",
+                        default=9)
+    opt.add_argument("--width",
+                        type=int,
+                        required=False,
+                        help="width of the game",
+                        default=9)
+    opt.add_argument("--mine_num",
+                        type=int,
+                        required=False,
+                        help="number of mines",
+                        default=10)
+    opt.add_argument("--format_error_threshold",
+                        type=int,
+                        required=False,
+                        help="format error threshold",
+                        default=5)
+    opt.add_argument("--logic_error_threshold",
+                        type=int,
+                        required=False,
+                        help="logic error threshold",
+                        default=5)
+    opt.add_argument("--debug",
+                        type=bool,
+                        required=False,
+                        help="debug mode",
+                        default=False)
+    
+    config = vars(opt.parse_args())
+    return config
 
 def main():
-    game = Game(GAME_HEIGHT, GAME_WIDTH, MINE_NUM)
+    config = get_argument()
+    FORMAT_ERROR_THRESHOLD = config["format_error_threshold"]
+    LOGIC_ERROR_THRESHOLD = config["logic_error_threshold"]
+    GAME_WIDTH = config["width"]
+    GAME_HEIGHT = config["height"]
+    MINE_NUM = config["mine_num"]
+    DEBUG_MODE = config["debug"]
+    DEBUG_MODE = True
+    
+    game = AnalysisGame(GAME_HEIGHT, GAME_WIDTH, MINE_NUM)
+    
     for i in range(GAME_HEIGHT):
+        find_0 = False
         for j in range(GAME_WIDTH):
             if game.getCellData(i, j) == 0:
+                find_0 = True
                 game.openCell(i, j)
                 break
+        if find_0:
+            break
+    
+    if config["test_type"] == "Incontext":
+        agent = IncontextAgent(config["model_name"])
+    elif config["test_type"] == "CoT":
+        if config["CoTCount"] is None:
+            raise ValueError()
+        agent = CoTAgent(config["model_name"], config["CoTCount"])
+    else:
+        raise ValueError()
 
-    agent = CoTAgent("gpt-3.5-turbo", 3)
-    format_error_count = 0
-    logic_error_count = 0
-    valid_open_count = 0
-    valid_open_rate = 1.0
-    valid_action_count = 0
-    total_action_count = 0
-    last_error = None
+    last_error = ActionFeedback.SUCCESS
     while True:
         if game.checkLose():
             print("GPT lose the game")
@@ -33,72 +93,43 @@ def main():
         if game.checkWin():
             print("GPT win the game")
             break
-
-        if format_error_count >= FORMAT_ERROR_THRESHOLD:
+        
+        if game.format_error_count >= FORMAT_ERROR_THRESHOLD:
             print("Format error threshold reached")
             break
 
-        if logic_error_count >= LOGIC_ERROR_THRESHOLD:
+        if game.logic_error_count >= LOGIC_ERROR_THRESHOLD:
             print("Logic error threshold reached")
             break
 
-        game.printMap()
+        if DEBUG_MODE:
+            game.printMap()
+        
         valid, action, pos = agent.getAction(game, last_error)
 
         if not valid:
             print("Format error")
-            format_error_count += 1
+            game.format_error_count += 1
             last_error = ActionFeedback.FORMAT_ERROR
             continue
             
         x, y = pos
-        print(action, x, y)
-        total_action_count += 1
-        
-        if not game.validPos(x, y):
-            print("Logic error")
-            logic_error_count += 1
-            last_error = ActionFeedback.INVALID_CELL
-            continue
-        
-        if action == "open":
-            if game.getCellIsOpen(x, y):
-                print("Logic error")
-                logic_error_count += 1
-                last_error = ActionFeedback.OPEN_NUMBER_CELL
-            elif game.getCellHasFlag(x, y):
-                print("Logic error")
-                logic_error_count += 1
-                last_error = ActionFeedback.OPEN_FLAGGED_CELL
-            else:
-                print("valid move")
-                valid_action_count += 1
-                valid_open_count += 1
-                prob_gen =  ProbabilityCalculator(game)
-                prob_gen.run()
-                valid_open_rate *= prob_gen.getSingleProb(x, y)
-                game.openCell(x, y)
-                last_error = None
+        if DEBUG_MODE:
+            print(action, x, y)
+        game.total_action_count += 1
 
+        if action == "open":
+            last_error = game.openCell(x, y)
+            if DEBUG_MODE:
+                print(last_error)
         
         if action == "flag":
-            if game.getCellIsOpen(x, y):
-                print("Logic error")
-                logic_error_count += 1
-                last_error = ActionFeedback.FLAG_NUMBER_CELL
-            else:
-                print("valid move")
-                if game.getCellHasFlag(x, y):
-                    game.removeFlag(x, y)
-                else:
-                    game.setFlag(x, y)
-                last_error = None
+            last_error = game.setFlag(x, y)
+            if DEBUG_MODE:
+                print(last_error)
         
-    print(f"valid open count: {valid_open_count}.")
-    print(f"valid open rate: {valid_open_rate}.")
-    print(f"valid action count: {valid_action_count}.")
-    print(f"valid action rate: {valid_action_count / total_action_count}.")
-
+    print(f"Valid rate: {game.getValidRate()}")
+    print(f"Average probability: {game.getAverageProbability()}")
         
 if __name__ == '__main__':
     main()

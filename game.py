@@ -77,18 +77,18 @@ class Game:
         - x: x coordinate of the cell
         - y: y coordinate of the cell
         '''
-        if self.isValidAction(x, y) != ActionFeedback.SUCCESS:
-            return self.isValidAction(x, y)
+        if self.isValidOpenCell(x, y) != ActionFeedback.SUCCESS:
+            return self.isValidOpenCell(x, y)
         
         self.map[x][y].open()
         if self.map[x][y].data == 0:
             for j in range(-1, 2):
                 for k in range(-1, 2):
-                    if 0 <= x + k < self.height and 0 <= y + j < self.width:
+                    if 0 <= x + k < self.height and 0 <= y + j < self.width and not self.map[x + k][y + j].isOpen and not self.map[x + k][y + j].hasFlag:
                         self.openCell(x + k, y + j)
         return ActionFeedback.SUCCESS
     
-    def isValidAction(self, x, y):
+    def isValidOpenCell(self, x, y):
         if not self.validPos(x, y):
             return ActionFeedback.INVALID_CELL
         if self.gameState != GameState.PLAYING:
@@ -99,36 +99,28 @@ class Game:
             return ActionFeedback.OPEN_FLAGGED_CELL
         return ActionFeedback.SUCCESS
 
-
     def setFlag(self, x, y):
         '''
         Set a flag on the cell
         - x: x coordinate of the cell
         - y: y coordinate of the cell
         '''
-        if self.gameState != GameState.PLAYING:
-            return False
-        if self.map[x][y].isOpen:
-            return False
+        if self.isValidSetFlag(x, y) != ActionFeedback.SUCCESS:
+            return self.isValidSetFlag(x, y)
         if self.map[x][y].hasFlag:
-            return False
-        self.map[x][y].setFlag()
-        return True
-    
-    def removeFlag(self, x, y):
-        '''
-        Remove the flag on the cell
-        - x: x coordinate of the cell
-        - y: y coordinate of the cell
-        '''
+            self.map[x][y].removeFlag()
+        else:
+            self.map[x][y].setFlag()
+        return ActionFeedback.SUCCESS
+
+    def isValidSetFlag(self, x, y):
+        if not self.validPos(x, y):
+            return ActionFeedback.INVALID_CELL
         if self.gameState != GameState.PLAYING:
-            return False
+            return ActionFeedback.GAME_HAS_ENDED
         if self.map[x][y].isOpen:
-            return False
-        if not self.map[x][y].hasFlag:
-            return False
-        self.map[x][y].removeFlag()
-        return True
+            return ActionFeedback.FLAG_NUMBER_CELL
+        return ActionFeedback.SUCCESS
 
     def getCellData(self, x, y):
         '''
