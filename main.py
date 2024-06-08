@@ -1,8 +1,8 @@
 from AnalysisGame import AnalysisGame
 from IncontextAgent import IncontextAgent
-from actionFeedback import ActionFeedback
-from probability import ProbabilityCalculator
+from FineTunedAgent import FineTunedAgent
 from CoTAgent import CoTAgent
+from actionFeedback import ActionFeedback
 import argparse
 
 def get_argument():
@@ -13,7 +13,7 @@ def get_argument():
                         help="model name")
     opt.add_argument("--test_type",
                         type=str,
-                        choices=['Incontext', 'CoT'],
+                        choices=['Incontext', 'FineTuned', 'CoT'],
                         required=True,
                         help="test type")
     opt.add_argument("--CoTCount",
@@ -76,14 +76,15 @@ def main():
         if find_0:
             break
     
+    agent = None
     if config["test_type"] == "Incontext":
         agent = IncontextAgent(config["model_name"])
     elif config["test_type"] == "CoT":
         if config["CoTCount"] is None:
             raise ValueError()
         agent = CoTAgent(config["model_name"], config["CoTCount"])
-    else:
-        raise ValueError()
+    elif config["test_type"] == "FineTuned":
+        agent = FineTunedAgent(config["model_name"])
 
     last_error = ActionFeedback.SUCCESS
     while True:

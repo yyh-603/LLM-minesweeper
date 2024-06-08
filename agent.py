@@ -6,7 +6,7 @@ class Agent:
     def __init__(self, modelName: str):
         self.api = OpenAIAPI(modelName)
 
-    def process_response(self, response: str):
+    def _process_response(self, response: str):
         raise NotImplementedError()
     
     def getAction(self, game: Game, falied_reason: ActionFeedback):
