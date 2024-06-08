@@ -4,6 +4,7 @@ from FineTunedAgent import FineTunedAgent
 from CoTAgent import CoTAgent
 from actionFeedback import ActionFeedback
 import argparse
+import random
 
 def get_argument():
     opt = argparse.ArgumentParser()
@@ -50,6 +51,12 @@ def get_argument():
                         required=False,
                         help="debug mode",
                         default=False)
+    opt.add_argument("--fixed-seed",
+                        type=bool,
+                        required=False,
+                        help="fixed seed",
+                        default=False)
+                     
     
     config = vars(opt.parse_args())
     return config
@@ -62,8 +69,11 @@ def main():
     GAME_HEIGHT = config["height"]
     MINE_NUM = config["mine_num"]
     DEBUG_MODE = config["debug"]
-    DEBUG_MODE = True
+    FIXED_SEED = config["fixed_seed"]
     
+    if FIXED_SEED:
+        random.seed(114514)
+
     game = AnalysisGame(GAME_HEIGHT, GAME_WIDTH, MINE_NUM)
     
     for i in range(GAME_HEIGHT):
