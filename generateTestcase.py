@@ -27,7 +27,7 @@ def generateImcompleteMap(height: int, width: int, minesNum: int, randomSelectNu
         
         game.openCell(x, y)
     
-    return game.gridFormat()
+    return game
 
 
 if __name__ == '__main__':
@@ -43,7 +43,14 @@ if __name__ == '__main__':
     for stepNum in range(1, 6):
         for i in range(10):
             path = Path.joinpath(dir_path, f'{height}_{width}_{minesNum}_{stepNum}_{i}.txt')
+
+            game = generateImcompleteMap(height, width, minesNum, stepNum)
+
+            grid = game.gridFormat()
+            answer = game.getAllData()
             
             file = open(path, 'w')
-            file.write(generateImcompleteMap(height, width, minesNum, stepNum))
+            file.write(grid)
+            for row in answer:
+                file.write(' '.join([str(x) for x in row]) + '\n')
             file.close()
