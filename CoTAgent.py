@@ -39,7 +39,7 @@ class CoTAgent(Agent):
         else:
             return False, None
 
-    def getAction(self, game: Game, falied_reason: ActionFeedback):
+    def getAction(self, game: Game, falied_reason: ActionFeedback = ActionFeedback.SUCCESS):
         promptgen = CoTPrompt()
         prompt_base = ""
         prompt_base += promptgen.intro_game()

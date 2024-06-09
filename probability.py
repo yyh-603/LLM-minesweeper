@@ -58,6 +58,7 @@ class ProbabilityCalculator:
         self.total_state_num = 0
         self.current_have_mine = [False for _ in range(len(self.need_check_cell))]
         self._recur_count(self.game.getMinesNum())
+        # TODO: exception of total_state_num == 0
         if self.total_state_num == 0:
             raise NotImplementedError()
         for x in range(self.height):

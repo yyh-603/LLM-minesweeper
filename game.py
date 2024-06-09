@@ -62,7 +62,6 @@ class Game:
         self.minesNum = 0
         with open(filename, "r") as file:
             lines = file.readlines()
-            print(lines)
             self.height, self.width = len(lines) // 2, len(lines[0].split())
             for i in range(len(lines)):
                 lines[i] = lines[i].split()
