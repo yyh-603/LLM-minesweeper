@@ -4,8 +4,8 @@ from probability import ProbabilityCalculator
 import math
 
 class AnalysisGame(Game):
-    def __init__(self, height: int, width: int, minesNum: int):
-        super().__init__(height=height, width=width, minesNum=minesNum)
+    def __init__(self, height: int = -1, width: int = -1, minesNum: int = -1, filename: str = None):
+        super().__init__(height=height, width=width, minesNum=minesNum, filename=filename)
         self.valid_open_count = 0
         self.total_open_count = 0
         self.format_error_count = 0
