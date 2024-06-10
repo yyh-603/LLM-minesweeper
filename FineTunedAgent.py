@@ -7,7 +7,7 @@ import re
 class FineTunedAgent(Agent):
 
     def _process_response(self, response: str):
-        pattern =  r"ACTION: (?P<action>open|flag) (?P<x>\d+) (?P<y>\d+)"
+        pattern =  r"(?P<action>open|flag) (?P<x>\d+) (?P<y>\d+)"
         match = re.search(pattern, response, re.DOTALL)
         if match:
             ret = {
