@@ -20,7 +20,7 @@ class IncontextAgent(Agent):
         else:
             return False, None
 
-    def getAction(self, game: Game, falied_reason: ActionFeedback):
+    def getAction(self, game: Game, falied_reason: ActionFeedback = ActionFeedback.SUCCESS):
         promptgen = IncontextPrompt()
         prompt = ""
         prompt += promptgen.intro_game()

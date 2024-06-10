@@ -3,15 +3,15 @@ from enum import Enum
 from actionFeedback import ActionFeedback
 
 class Cell:
-    def __init__(self, data):
+    def __init__(self, data, isOpen = False, hasFlag = False):
         '''
         - data: number in the cell, -1 if the cell is a mine
         - isOpen: a boolean indicating whether the cell is open or not
         - hasFlag: a boolean indicating whether the cell has a flag or not
         '''
         self.data = data
-        self.isOpen = False
-        self.hasFlag = False
+        self.isOpen = isOpen
+        self.hasFlag = hasFlag
     
     def open(self):
         self.isOpen = True
@@ -40,13 +40,40 @@ class GameState(Enum):
     LOSE = 2
 
 class Game:
-    def __init__(self, height, width, minesNum):
-        self.width = width
-        self.height = height
-        self.map = []
-        self.minesNum = minesNum
+    def __init__(self, height = -1, width = -1, minesNum = -1, filename = None):
         self.gameState = GameState.PLAYING
-        self.generateMap()
+        if filename is not None:
+            self.loadMap(filename)
+        elif height == -1 or width == -1 or minesNum == -1:
+            raise ValueError('Either the filename or the height, width, and minesNum should be provided.')
+        else:
+            self.width = width
+            self.height = height
+            self.map = []
+            self.minesNum = minesNum
+            self.generateMap()
+
+    def loadMap(self, filename):
+        '''
+        Load the map from a file
+        - filename: the name of the file
+        '''
+        self.map = []
+        self.minesNum = 0
+        with open(filename, "r") as file:
+            lines = file.readlines()
+            self.height, self.width = len(lines) // 2, len(lines[0].split())
+            for i in range(len(lines)):
+                lines[i] = lines[i].split()
+            for i in range(self.height):
+                row = []
+                for j in range(self.width):
+                    cell = Cell(lines[i + self.height][j], isOpen = lines[i][j] != '.', hasFlag = lines[i][j] == 'F')
+                    if cell.data == -1:
+                        self.minesNum += 1
+                    row.append(cell)
+                self.map.append(row)
+                
 
     def generateMap(self):
         '''
@@ -129,6 +156,12 @@ class Game:
         - y: y coordinate of the cell
         '''
         return self.map[x][y].data
+    
+    def getAllData(self):
+        '''
+        Get the data of all cells
+        '''
+        return [[self.map[i][j].data for j in range(self.width)] for i in range(self.height)]
 
     def getCellIsOpen(self, x, y):
         '''
@@ -285,3 +318,9 @@ if __name__ == '__main__':
     
     print(mp.openCell(5, 5))
     print(mp.gridFormat())
+    mp = Game(filename='incompleteMap\\8_10_10_5_3.txt')
+    print(mp.gridFormat())
+    data = mp.getAllData()
+    for i in range(len(data)):
+        for j in range(len(data[i])):
+            print(data[i][j], end=(' ' if j != len(data[i]) - 1 else '\n'))

@@ -3,7 +3,11 @@ from IncontextAgent import IncontextAgent
 from FineTunedAgent import FineTunedAgent
 from CoTAgent import CoTAgent
 from actionFeedback import ActionFeedback
+from dataLoader import DataLaoder
+from probability import ProbabilityCalculator
 import argparse
+import random
+import math
 
 def get_argument():
     opt = argparse.ArgumentParser()
@@ -16,6 +20,10 @@ def get_argument():
                         choices=['Incontext', 'FineTuned', 'CoT'],
                         required=True,
                         help="test type")
+    opt.add_argument("--dir_path",
+                        type=str,
+                        required=True,
+                        help="directory path")
     opt.add_argument("--CoTCount",
                         type=int,
                         required=False,
@@ -50,6 +58,11 @@ def get_argument():
                         required=False,
                         help="debug mode",
                         default=False)
+    opt.add_argument("--fixed-seed",
+                        type=bool,
+                        required=False,
+                        help="fixed seed",
+                        default=False)                     
     
     config = vars(opt.parse_args())
     return config
@@ -62,8 +75,15 @@ def main():
     GAME_HEIGHT = config["height"]
     MINE_NUM = config["mine_num"]
     DEBUG_MODE = config["debug"]
-    DEBUG_MODE = True
+    FIXED_SEED = config["fixed_seed"]
     
+    if FIXED_SEED:
+        random.seed(114514)
+    
+    data_loader = DataLaoder(config["dir_path"])
+
+
+
     game = AnalysisGame(GAME_HEIGHT, GAME_WIDTH, MINE_NUM)
     
     for i in range(GAME_HEIGHT):
@@ -86,51 +106,54 @@ def main():
     elif config["test_type"] == "FineTuned":
         agent = FineTunedAgent(config["model_name"])
 
-    last_error = ActionFeedback.SUCCESS
-    while True:
-        if game.checkLose():
-            print("GPT lose the game")
-            break
-        if game.checkWin():
-            print("GPT win the game")
-            break
-        
-        if game.format_error_count >= FORMAT_ERROR_THRESHOLD:
-            print("Format error threshold reached")
-            break
+    valid_open_count = 0
+    total_open_count = 0
+    valid_flag_count = 0
+    total_flag_count = 0
+    format_error_count = 0
+    logic_error_count = 0
+    probability_ln_sum = 0
 
-        if game.logic_error_count >= LOGIC_ERROR_THRESHOLD:
-            print("Logic error threshold reached")
-            break
-
+    for test_case_id in range(data_loader.get_num_files()):
+        game = data_loader.next_game()
         if DEBUG_MODE:
+            print(f"Test case {test_case_id}")
             game.printMap()
         
-        valid, action, pos = agent.getAction(game, last_error)
-
+        valid, action, pos = agent.getAction(game)
+        
         if not valid:
             print("Format error")
-            game.format_error_count += 1
-            last_error = ActionFeedback.FORMAT_ERROR
+            format_error_count += 1
             continue
-            
         x, y = pos
         if DEBUG_MODE:
             print(action, x, y)
-        game.total_action_count += 1
 
         if action == "open":
-            last_error = game.openCell(x, y)
-            if DEBUG_MODE:
-                print(last_error)
+            total_open_count += 1
+            prob = ProbabilityCalculator(game)
+            feedback = game.openCell(x, y)
+            if feedback == ActionFeedback.SUCCESS:
+                valid_open_count += 1
+                probability_ln_sum += math.log(prob.getSingleProb(x, y))
+            else:
+                logic_error_count += 1
         
         if action == "flag":
-            last_error = game.setFlag(x, y)
-            if DEBUG_MODE:
-                print(last_error)
-        
-    print(f"Valid rate: {game.getValidRate()}")
-    print(f"Average probability accurancy: {game.getAverageProbabilityAccurancy()}")
+            total_flag_count += 1
+            prob = ProbabilityCalculator(game)
+            feedback = game.setFlag(x, y)
+            if feedback == ActionFeedback.SUCCESS:
+                valid_flag_count += 1
+                probability_ln_sum += math.log(1 - prob.getSingleProb(x, y))
+            else:
+                logic_error_count += 1
+    
+    print(f"valid open rate: {valid_open_count / total_open_count}")
+    print(f"valid flag rate: {valid_flag_count / total_flag_count}")
+    print(f"total valid rate: {(valid_open_count + valid_flag_count) / (total_open_count + total_flag_count)}")
+    print(f"average probability: {math.exp(probability_ln_sum / (valid_open_count + valid_flag_count))}")
         
 if __name__ == '__main__':
     main()

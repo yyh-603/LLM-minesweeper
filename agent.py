@@ -9,6 +9,6 @@ class Agent:
     def _process_response(self, response: str):
         raise NotImplementedError()
     
-    def getAction(self, game: Game, falied_reason: ActionFeedback):
+    def getAction(self, game: Game, falied_reason: ActionFeedback = ActionFeedback.SUCCESS):
         raise NotImplementedError()
     
