@@ -97,6 +97,28 @@ class ProbabilityCalculator:
                 if not self.game.getCellIsOpen(x, y):
                     maxProb = max(maxProb, self.prob[x][y])
         return maxProb
+
+    def getMinProb(self):
+        minProb = 1
+        for x in range(self.height):
+            for y in range(self.width):
+                if not self.game.getCellIsOpen(x, y):
+                    minProb = min(minProb, self.prob[x][y])
+        return minProb
+    
+    def getMinProbPos(self):
+        minProb = 1
+        min_X = -1
+        min_Y = -1
+        for x in range(self.height):
+            for y in range(self.width):
+                if not self.game.getCellIsOpen(x, y):
+                    if self.prob[x][y] < minProb:
+                        minProb = self.prob[x][y]
+                        min_X = x
+                        min_Y = y
+        
+        return (min_X, min_Y)
     
     def getMaxProbPos(self):
         maxProb = -1
@@ -178,35 +200,40 @@ class ProbabilityCalculator:
         return (x >= 0 and x < self.height and y >= 0 and y < self.width)
          
 
-if __name__ == '__main__':
-    width = 8
-    height = 10
-    mine_num = 9
+# if __name__ == '__main__':
+#     width = 8
+#     height = 10
+#     mine_num = 9
     
-    game = Game(width, height, mine_num)
-    game.generateMap()
-    for _ in range(1):
-        canOpenCell = []
-        for x in range(game.height):
-            for y in range(game.width):
-                if (not game.getCellIsOpen(x, y)) and game.getCellData(x, y) != -1:
-                    canOpenCell.append((x, y))
+#     game = Game(width, height, mine_num)
+#     game.generateMap()
+#     for _ in range(1):
+#         canOpenCell = []
+#         for x in range(game.height):
+#             for y in range(game.width):
+#                 if (not game.getCellIsOpen(x, y)) and game.getCellData(x, y) != -1:
+#                     canOpenCell.append((x, y))
                     
-        if len(canOpenCell) == 0:
-            break
-        randID = random.randrange(0,len(canOpenCell))
-        game.openCell(canOpenCell[randID][0], canOpenCell[randID][1])
+#         if len(canOpenCell) == 0:
+#             break
+#         randID = random.randrange(0,len(canOpenCell))
+#         game.openCell(canOpenCell[randID][0], canOpenCell[randID][1])
     
-    game.printMap()
+#     game.printMap()
     
-    probabilityCalculator = ProbabilityCalculator(game)
+#     probabilityCalculator = ProbabilityCalculator(game)
     
-    prob = probabilityCalculator.getAllProb()
+#     prob = probabilityCalculator.getAllProb()
     
-    for x in range(width):
-        for y in range(height):
-            print(prob[x][y], end=' ')
-        print()
+#     for x in range(width):
+#         for y in range(height):
+#             print(prob[x][y], end=' ')
+#         print()
     
-    print(probabilityCalculator.getMaxProb())
-    print(probabilityCalculator.getMaxProbPos())
+#     print(probabilityCalculator.getMaxProb())
+#     print(probabilityCalculator.getMaxProbPos())
+
+if __name__ == '__main__':
+    game = Game(filename='partial_unittest_data/5_5_4_2_1.txt')
+    prob = ProbabilityCalculator(game)
+    print(prob.getAllProb())
