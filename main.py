@@ -130,7 +130,7 @@ def main():
                 print(last_error)
         
     print(f"Valid rate: {game.getValidRate()}")
-    print(f"Average probability: {game.getAverageProbability()}")
+    print(f"Average probability accurancy: {game.getAverageProbabilityAccurancy()}")
         
 if __name__ == '__main__':
     main()

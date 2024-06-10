@@ -58,11 +58,13 @@ class ProbabilityCalculator:
         self.total_state_num = 0
         self.current_have_mine = [False for _ in range(len(self.need_check_cell))]
         self._recur_count(self.game.getMinesNum())
+        
         if self.total_state_num == 0:
-            raise NotImplementedError()
-        for x in range(self.height):
-            for y in range(self.width):
-                self.prob[x][y] = (1 - self.prob[x][y] / self.total_state_num)
+            raise ValueError(f'There are no any possible solution.\n{self.game.gridFormat()}')
+        else:
+            for x in range(self.height):
+                for y in range(self.width):
+                    self.prob[x][y] = (1 - self.prob[x][y] / self.total_state_num)
     
     
     def getSingleProb(self, x, y):
@@ -74,6 +76,12 @@ class ProbabilityCalculator:
     def getAllProb(self):
         return self.prob
     
+    def getMaxProb(self):
+        maxProb = 0
+        for x in range(self.height):
+            for y in range(self.width):
+                maxProb = max(maxProb, self.prob[x][y])
+        return maxProb
     
     def _recur_count(self, mines_num, idx = 0):
         if idx == len(self.need_check_cell):
@@ -148,11 +156,16 @@ if __name__ == '__main__':
     game = Game(width, height, mine_num)
     game.generateMap()
     for _ in range(5):
-        x = random.randrange(0, width)
-        y = random.randrange(0, height)
-        if game.getCellData(x, y) == -1 or game.getCellIsOpen(x, y):
-            continue
-        game.openCell(x, y)
+        canOpenCell = []
+        for x in range(game.height):
+            for y in range(game.width):
+                if (not game.getCellIsOpen(x, y)) and game.getCellData(x, y) != -1:
+                    canOpenCell.append((x, y))
+                    
+        if len(canOpenCell) == 0:
+            break
+        randID = random.randrange(0,len(canOpenCell))
+        game.openCell(canOpenCell[randID][0], canOpenCell[randID][1])
     
     game.printMap()
     

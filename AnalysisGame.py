@@ -12,6 +12,7 @@ class AnalysisGame(Game):
         self.total_action_count = 0
         self.logic_error_count = 0
         self.probability_ln_sum = 0
+        self.have_open_zero_prob = False
 
     def openCell(self, x, y):
         '''
@@ -28,7 +29,11 @@ class AnalysisGame(Game):
         self.valid_open_count += 1
         probabilityCalculator = ProbabilityCalculator(self)
         prob = probabilityCalculator.getSingleProb(x, y)
-        self.probability_ln_sum += math.log(prob)
+        
+        if prob == 0:
+            self.have_open_zero_prob = True
+        else:
+            self.probability_ln_sum += math.log(prob / probabilityCalculator.getMaxProb())
         
         super().openCell(x, y)
         return action_feedback
@@ -50,18 +55,25 @@ class AnalysisGame(Game):
     def getValidRate(self):
         return self.valid_open_count / self.total_open_count
     
-    def getAverageProbability(self):
-        return math.exp(self.probability_ln_sum / self.valid_open_count)
+    def getAverageProbabilityAccurancy(self):
+        if self.have_open_zero_prob:
+            return 0
+        else:
+            return math.exp(self.probability_ln_sum / self.valid_open_count)
     
 
 if __name__ == '__main__':
     game = AnalysisGame(8, 10, 10)
-    print(game.openCell(5, 5))
-    print(game.openCell(5, 5))
-    print(game.setFlag(7, 7))
-    print(game.openCell(7, 7))
-    print(game.setFlag(7, 7))
-    print(game.openCell(7, 7))
-    print(game.openCell(15, 15))
+    try:
+        print(game.openCell(5, 5))
+        print(game.openCell(5, 5))
+        print(game.setFlag(7, 7))
+        print(game.openCell(7, 7))
+        print(game.setFlag(7, 7))
+        print(game.openCell(7, 7))
+        print(game.openCell(15, 15))
+    except ValueError as e:
+        print(e)
+    print(game.getAverageProbabilityAccurancy())
     print(game.logic_error_count) # should be 3
     
