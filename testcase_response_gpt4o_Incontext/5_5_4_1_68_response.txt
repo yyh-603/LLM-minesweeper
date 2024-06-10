@@ -1,0 +1,3 @@
+REASON: The cell at (3, 1) has 2 neighboring mines. Observing the neighboring cells, we see that the only unopened cells with possibility of mines are (3, 0) and (4, 1). Given cell (3, 1)'s clue, we are certain that both (3, 0) and (4, 1) must contain mines. Moreover, the cell at (3, 2) has 1 neighboring mine, which means since (4, 1) is already flagged, the other neighboring cell must be safe. Therefore, we can safely open (2, 2).
+
+ACTION: open 2 2

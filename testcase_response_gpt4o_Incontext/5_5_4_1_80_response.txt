@@ -1,0 +1,3 @@
+REASON: Because the cell at (4, 3) has 2 neighboring mines, and only 2 neighboring cells are not opened (i.e., (3, 3) and (4, 4)), we can know that both cells (3, 3) and (4, 4) are mines. So we flag them.
+
+ACTION: flag 3 3

@@ -1,6 +1,7 @@
 from game import Game
 import math
 import random
+import copy
 
 '''
 return the survival probability
@@ -23,7 +24,7 @@ Get all cells' survival probability:
 '''
 class ProbabilityCalculator:
     def __init__(self, game):
-        self.game: Game = game
+        self.game: Game = copy.deepcopy(game)
         self.width = self.game.getWidth()
         self.height = self.game.getHeight()
         self.mine_num = self.game.getMinesNum()
@@ -234,6 +235,8 @@ class ProbabilityCalculator:
 #     print(probabilityCalculator.getMaxProbPos())
 
 if __name__ == '__main__':
-    game = Game(filename='partial_unittest_data/5_5_4_2_1.txt')
+    game = Game(filename='testcase/5_5_4_1_91.txt')
     prob = ProbabilityCalculator(game)
     print(prob.getAllProb())
+    print(prob.getMaxProb())
+    print(prob.getMinProb())

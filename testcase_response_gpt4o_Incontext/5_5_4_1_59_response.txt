@@ -1,0 +1,7 @@
+REASON: Taking a look at the table, we can see that the cell at (2, 3) has a number 3, indicating that it has 3 neighboring mines. Currently, it has three covered neighboring cells at (1, 3), (3, 3), and (2, 4). 
+
+Given that the cell at (2, 3) already indicates 3 neighboring mines and all three of its surrounding cells are covered, they must all be mines. We can safely flag these cells.
+
+Let's start by flagging the cell at (1, 3).
+
+ACTION: flag 1 3

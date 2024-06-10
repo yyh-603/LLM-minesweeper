@@ -1,0 +1,3 @@
+REASON: The cell at (3, 2) has 2 neighboring mines, and we know that the cells at (2, 2) and (2, 3) have 1 mine each. Since the cell at (1, 3) is the only unopened neighboring cell of (2, 2), we can deduce that it is a mine.
+
+ACTION: flag 1 3

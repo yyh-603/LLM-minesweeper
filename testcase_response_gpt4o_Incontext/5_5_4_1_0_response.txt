@@ -1,0 +1,3 @@
+REASON: The cell at (1, 3) shows the number 2, indicating that there are 2 mines adjacent to it. Given its current adjacent covered cells are (1, 4) and (2, 4). We can infer there are at least two mines in its proximity. Since cell (1,2) is immediately adjacent and already shows 2 it might be likely cells outlined in its periphery offer mine-free area. The corner cell (2,2) could be flagged as it holds more certainty of housing the mine.
+
+ACTION: flag 2 4

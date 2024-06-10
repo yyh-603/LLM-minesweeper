@@ -1,0 +1,51 @@
+------- 0th response -------
+REASON: In the current table, let's analyze the opened cells with numbers to derive any safe moves or flags.
+- The cell at (2, 2) has the number 2, indicating there are 2 mines among its neighbors.
+- Given that its other neighboring cells (3, 2) has a 1 and (4, 2) has a 0 and the number on (2, 3) is a covered cell, it is safe to say that one of the 2 mines should be at (2, 3) and another mine must be in the rest of its neighboring cells. But to flag or open with the number provided isn¡¦t sufficient. 
+- The cell (4, 2) specifies there is zero mine indicating the cells surrounding this one as there couldn¡¦t be a mine near cell (4, 3) as well.
+
+Therefore, we can safely open cell (4, 3).
+
+ACTION: open 4 3
+------- 1th response -------
+CORRECTION REASON: The provided reasoning makes sense. However, there is an easier visible action. When looking at cell (3, 3), it has a neighbor cell (4, 3) with a clue of 1 mine in its vicinity.
+
+Let's analyze this step by step:
+1. Cell (4, 2) is indicating there are no mines in its neighbors, so (3, 2) and (3, 3) are safe to open.
+2. Since (3, 2) is already hint 1, it aligns with (4, 2) deciding no mine correctly at other vicinity around (4, 2)
+
+To maximize the revealed information with the minimum risk, let's open cells (3, 2) and (3, 3).
+
+CORRECTION ACTION: open 3 2 or open 3 3
+
+Given opening only one cell:
+
+CORRECTION ACTION: open 3 2
+
+or if more ideal if specifically needs exact action:
+
+CORRECTION ACTION: open 3 3
+------- 2th response -------
+---RESPONSE GUIDE---
+According to the current game state, existing reasoning, and action, please judge the existing action is good or not.
+Give your reason in "CORRECTION REASON:" part, and your action after corrected in "CORRECTION ACTION:" part.
+If the existing action is incorrect, please give another correct action.
+
+TABLE:
+. . . . . 
+. . . . . 
+1 1 2 . . 
+0 0 1 2 . 
+0 0 0 1 . 
+
+REASON: Analyze cell (3, 2). This cell has a `1`, indicating one mine surrounding it. All neighboring cells in this context are covered.
+
+Next, analyze cell (3, 3). 
+1. Since cell (4, 2) has no mines around it, meaning its surrounding cells, (3, 2) `(3,3) to identify)
+2. Opening (3, 2) looks safer since the purpose is to open neighboring cells around (4, 2), and since a known 1 hints (correctness).
+
+Given this, opening cell (3, 2) helps us be more certain:
+
+CORRECTION REASON: While analyzing, it becomes clear: Opening cell (3, 2) gives the next clue safely.
+
+CORRECTION ACTION: open 3 2

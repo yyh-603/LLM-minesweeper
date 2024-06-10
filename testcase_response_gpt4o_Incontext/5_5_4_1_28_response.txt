@@ -1,0 +1,4 @@
+REASON: Based on the current state of the board, we can see that the cell at (3, 2) has 4 neighboring mines and only 4 neighboring cells are not opened. This means all these neighboring cells must have mines. The neighboring cells of (3, 2) that are not opened are (2, 3), (3, 3), (3, 4), and (4, 2). Therefore, we can flag these cells safely.
+
+ACTION:
+flag 2 3

@@ -1,0 +1,3 @@
+REASON: Examining the table, we see that the cell at (1, 3) has 1 neighboring mine, and the cells (0, 2), (1, 2), and (1, 4) are already opened, having either 0 or 1 neighboring mines. Furthermore, the cell at (1, 1) is covered, and it must be flagged to ensure that the cell at (1, 3) has only one neighboring mine. The only covered neighboring cell of (1, 3) is (1, 1).
+
+ACTION: flag 1 1

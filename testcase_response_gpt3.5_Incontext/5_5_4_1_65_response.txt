@@ -1,0 +1,2 @@
+REASON: The cell at (2, 2) has 1 neighboring mine, and the cell at (3, 2) has not been opened. Therefore, we can conclude that the cell at (3, 1) is a mine and should be flagged for safety.
+ACTION: flag 3 1

@@ -1,0 +1,3 @@
+REASON: The cell at (3, 2) has a number 2, indicating there are two neighboring mines. Two of its neighbors, (2, 2) and (1, 2), are still covered. Similarly, the cell at (2, 2) also displays the number 2 with both its neighboring cells at (1, 2) and (3, 2) still covered. Based on these clues, it is safe to infer that both of these covered cells likely have the mines. Thus, we can safely flag cell (2, 2).
+
+ACTION: flag 2 2

@@ -1,0 +1,5 @@
+REASON: Firstly, we can identify cells with obvious patterns. The cell at (3, 2) has a number 3, indicating that all three neighboring cells (3, 3), (4, 2), and (4, 3) have mines.
+
+Given this information, we know that the cell at (3, 3) is a mine. Consequently, it would be safe to flag this cell to avoid any accidental openings.
+
+ACTION: flag 3 3

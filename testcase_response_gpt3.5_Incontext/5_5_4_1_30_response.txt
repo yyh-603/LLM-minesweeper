@@ -1,0 +1,2 @@
+REASON: The cell at (1, 3) has 1 neighboring mine. Since all cells around it are opened and accounted for, we can deduce that the cell at (0, 2) is safe to open.
+ACTION: open 0 2

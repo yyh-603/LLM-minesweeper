@@ -1,0 +1,16 @@
+model: gpt-3.5-turbo
+test_type: CoT
+CoT count: 2
+Total test case: 100
+Valid action count: 29
+Format error count: 13
+Logic error count: 58
+Zero count: 10
+Not zero count: 19
+---------------------------------
+Valid rate: 0.29
+Format Error rate: 0.13
+Logic Error rate: 0.58
+Failed rate: 0.3448275862068966
+Success rate: 0.6551724137931034
+Average probability: 0.6614638914571768

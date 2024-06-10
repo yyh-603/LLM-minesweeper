@@ -1,0 +1,15 @@
+model: ft:gpt-3.5-turbo-0125:yyh-603:test:9YdqsY2Z
+test_type: FineTuned
+Total test case: 100
+Valid action count: 83
+Format error count: 0
+Logic error count: 17
+Zero count: 16
+Not zero count: 67
+---------------------------------
+Valid rate: 0.83
+Format Error rate: 0.0
+Logic Error rate: 0.17
+Failed rate: 0.1927710843373494
+Success rate: 0.8072289156626506
+Average probability: 0.6605344808100613

@@ -1,0 +1,4 @@
+REASON: Given the current state of the board, the cell at (2, 2) has 2 neighboring mines. The neighboring cells of (2, 2) are (1, 1), (1, 2), (1, 3), (2, 1), (2, 3), (3, 1), (3, 2), and (3, 3), but considering the unopened cells adjacent to (2, 2) which are (2, 1), (2, 3), (3, 1), (3, 2), and (3, 3). The cells (2, 3) and (3, 3) are likely safe to open:
+1. The cell 3, 3 should likely be opened because it is surrounded by numbers that give a good indication that the two mines are not in that location. 
+
+ACTION: open 3 3

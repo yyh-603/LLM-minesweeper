@@ -1,0 +1,12 @@
+------- 0th response -------
+REASON: The cell at (2, 0) has 1 neighboring mine. Since all the other neighboring cells are either opened or flagged, we can safely conclude that the cell at (1, 1) is a mine.
+ACTION: flag 1 1
+------- 1th response -------
+CORRECTION REASON: The cell at (2, 0) has 1 neighboring mine, but the neighboring cell at (1, 1) is not necessarily a mine, as there are unopened cells around it. 
+Consider another cell, the cell at (2, 2) has 1 neighboring mine, and all other neighboring cells are opened, we can safely conclude that the cell at (1, 3) is a mine.
+CORRECTION ACTION: flag 1 3
+------- 2th response -------
+CORRECTION REASON: The existing reason is valid. The cell at (2, 0) does have 1 neighboring mine but we cannot conclusively determine that the cell at (1, 1) is a mine based on the current information. 
+Consider another cell, the cell at (2, 2) has 1 neighboring mine, and all other neighboring cells are opened, we can safely conclude that the cell at (1, 3) is a mine.
+
+CORRECTION ACTION: flag 1 3

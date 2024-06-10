@@ -1,0 +1,3 @@
+REASON: Because the cell at (1, 1) has 2 neighboring mines, and both cells (0, 2) and (1, 2) are not opened, we can conclude that these cells could potentially have mines (given the limited information). However, the cell at (2, 2) can be opened safely because other cells around it are either already accounted for or couldn¡¦t possibly have more mines than indicated by the surrounding numbers.
+
+ACTION: open 2 2

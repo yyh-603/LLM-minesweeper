@@ -1,0 +1,3 @@
+REASON: The cell at (0, 3) has 1 neighboring mine, and all of its neighboring cells are either opened (indicated by numbers 0, 0, and 0) or covered (indicated by dots). Given that the cells (0, 2), (1, 2), and (1, 3) are already opened, the only possibility for the mine is the cell (1, 4). Therefore, we need to flag the cell at (1, 4).
+
+ACTION: flag 1 4

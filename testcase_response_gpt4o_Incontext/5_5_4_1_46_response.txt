@@ -1,0 +1,14 @@
+REASON: Let's analyze the opened cells to deduce the safe move.
+
+- The cell (0, 1) has a '2', which means it has two mines in its neighboring cells.
+- The cell directly adjacent is covered (0, 0) and (1, 1) is also covered.
+
+Likewise:
+- The cell (1, 1) which is opened, also shows a '2', which shares coverage of the cell (2, 1) and (0, 0).
+
+But:
+- The cell (2, 1) shows a '1', which shares mines towards (0, 1) and another cell (2, 1) showing (1);
+
+Because there are no overlapping mines combinations in this case, we can safely deduce to flag covered cells next to (0, 1)
+
+ACTION: flag 0 0

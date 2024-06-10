@@ -1,0 +1,3 @@
+REASON: The cell at (0, 2) has 1 neighboring mine. Both cells (0, 1) and (1, 2) are opened and show that there are no additional mines beside the ones already found, leaving us with the certain knowledge that the mine must be surrounded by the remaining covered cells directly connected to 0, 2. These are cells (0, 3) only; thus it must be flagged as a mine.
+
+ACTION: flag 0 3

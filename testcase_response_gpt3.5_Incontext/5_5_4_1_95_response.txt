@@ -1,0 +1,3 @@
+REASON: The cell at (0, 2) indicates there is 1 neighboring mine. Since there is only 1 unopened neighboring cell, we can deduce that the cell at (1, 3) is a mine and should be flagged.
+
+ACTION: flag 1 3

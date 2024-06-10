@@ -1,0 +1,5 @@
+REASON: Let's analyze the current board state. We know that the cell at (3, 1) has a '3', indicating that it has 3 neighboring mines. Currently, there are only three covered cells around (3, 1): (2, 0), (3, 0), and (4, 0). Since no cells around (3, 1) are flagged yet, we can infer that all these three cells are mines. 
+
+Therefore, we can safely flag the cell (2, 0) as it is definitely a mine.
+
+ACTION: flag 2 0

@@ -1,0 +1,3 @@
+REASON: Because the cell at (2, 3) has 2 neighboring mines, and the neighboring cell at (1, 4) already has 1 mine, we can deduce that the cell at (1, 3) is a mine. Hence, we can flag it for safety.
+
+ACTION: flag 1 3

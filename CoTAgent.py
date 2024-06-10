@@ -16,6 +16,7 @@ class CoTAgent(Agent):
         match = re.search(pattern, response, re.DOTALL)
         if match:
             ret = {
+                "response": response,
                 "reason": match.group("reason"),
                 "action": match.group("action"),
                 "x": int(match.group("x")),
@@ -23,13 +24,14 @@ class CoTAgent(Agent):
             }
             return True, ret
         else:
-            return False, None
+            return False, {"response": response}
     
     def _process_continue_response(self, response: str):
         pattern =  r"CORRECTION REASON: (?P<reason>.*)\nCORRECTION ACTION: (?P<action>open|flag) (?P<x>\d+) (?P<y>\d+)"
         match = re.search(pattern, response, re.DOTALL)
         if match:
             ret = {
+                "response": response,
                 "reason": match.group("reason"),
                 "action": match.group("action"),
                 "x": int(match.group("x")),
@@ -37,7 +39,7 @@ class CoTAgent(Agent):
             }
             return True, ret
         else:
-            return False, None
+            return False, {"response": response}
 
     def getAction(self, game: Game, falied_reason: ActionFeedback = ActionFeedback.SUCCESS):
         promptgen = CoTPrompt()
@@ -48,6 +50,8 @@ class CoTAgent(Agent):
         prompt_base += promptgen.action_format()
         prompt_base += promptgen.regulation()
 
+        full_response = []
+
         # first query
         first_prompt = prompt_base
         first_prompt += promptgen.example_1()
@@ -55,12 +59,13 @@ class CoTAgent(Agent):
         first_prompt += promptgen.example_3()
         first_prompt += promptgen.response_guide(game, falied_reason)
         response = self.api.sendMessage(promptgen.system_message(), first_prompt)
-        
-        # print(f'first response: {response}')
 
         valid, response = self._process_response(response)
+
+        full_response.append(response['response'])
+
         if not valid:
-            return False, None, None
+            return False, None, None, full_response
         
         # continue query
         for _ in range(self.CoTCount):
@@ -74,10 +79,11 @@ class CoTAgent(Agent):
             continue_prompt += promptgen.continue_example_3()
             continue_prompt += promptgen.continue_response_guide(game, reason, action, x, y)
             response = self.api.sendMessage(promptgen.system_message(), continue_prompt)
-            # print(f'continue response {_}: {response}')
 
             valid, response = self._process_continue_response(response)
+            full_response.append(response['response'])
+
             if not valid:
-                return False, None, None
+                return False, None, None, full_response
         
-        return True, response["action"], (response["x"], response["y"])
+        return True, response["action"], (response["x"], response["y"]), full_response

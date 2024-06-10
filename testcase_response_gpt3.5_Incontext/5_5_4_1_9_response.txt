@@ -1,0 +1,2 @@
+REASON: Because the cell at (3, 4) has only 1 neighboring mine, and all the neighboring cells are opened, we can conclude that the remaining covered cells at (4, 3) and (4, 4) are mines.
+ACTION: flag 4 3

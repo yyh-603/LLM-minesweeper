@@ -1,0 +1,2 @@
+REASON: The cell at (3, 3) has 2 neighboring mines, and we already know that the cell at (3, 4) is a mine. Therefore, the cells at (2, 3) and (4, 3) must each have 1 mine neighboring them, so it is safe to open the cell at (2, 3).
+ACTION: open 2 3

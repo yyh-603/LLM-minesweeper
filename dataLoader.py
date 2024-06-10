@@ -1,6 +1,4 @@
 from game import Game
-from actionFeedback import ActionFeedback
-from probability import ProbabilityCalculator
 import os
 
 class DataLaoder():
@@ -25,3 +23,19 @@ class DataLaoder():
         self.current_file_index += 1
         return self.current_game
 
+    def write_response(self, response) -> None:
+        filename = self.file_names[self.current_file_index - 1][0 : -4] + "_response.txt"
+        response_dir_path = self.dir_path + "_response"
+        if not os.path.exists(response_dir_path):
+            os.mkdir(response_dir_path)
+        with open(os.path.join(response_dir_path, filename), "w") as f:
+            if isinstance(response, str):
+                f.write(response)
+            elif isinstance(response, list):
+                for i, item in enumerate(response):
+                    f.write(f'------- {i}th response -------\n')
+                    f.write(item + '\n')
+    
+    def get_current_file_name(self):
+        return self.file_names[self.current_file_index - 1]
+    

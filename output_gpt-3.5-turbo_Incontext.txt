@@ -1,0 +1,15 @@
+model: gpt-3.5-turbo
+test_type: Incontext
+Total test case: 100
+Valid action count: 39
+Format error count: 0
+Logic error count: 61
+Zero count: 11
+Not zero count: 28
+---------------------------------
+Valid rate: 0.39
+Format Error rate: 0.0
+Logic Error rate: 0.61
+Failed rate: 0.28205128205128205
+Success rate: 0.717948717948718
+Average probability: 0.7401040399175874

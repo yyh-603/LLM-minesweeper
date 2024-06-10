@@ -1,0 +1,3 @@
+REASON: The cell at (2, 2) shows a '2', indicating there are two mines in its neighboring cells. The cells (1, 3) and (2, 3) are the only covered cells adjacent to (2, 2). Since (2, 2) indicates there are exactly two neighboring mines, both of these cells must contain mines. Thus, we can safely flag both of them. However, given only one move per turn, we will start with flagging cell (1, 3).
+
+ACTION: flag 1 3

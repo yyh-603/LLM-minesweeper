@@ -5,6 +5,7 @@ from CoTAgent import CoTAgent
 from actionFeedback import ActionFeedback
 import argparse
 import random
+from ui import MinesweeperUI
 
 def get_argument():
     opt = argparse.ArgumentParser()
@@ -75,6 +76,8 @@ def main():
         random.seed(114514)
 
     game = AnalysisGame(GAME_HEIGHT, GAME_WIDTH, MINE_NUM)
+    ui = MinesweeperUI(game)
+    ui.run()
     
     for i in range(GAME_HEIGHT):
         find_0 = False
@@ -82,6 +85,7 @@ def main():
             if game.getCellData(i, j) == 0:
                 find_0 = True
                 game.openCell(i, j)
+                ui.open_cell(i, j)
                 break
         if find_0:
             break
@@ -95,6 +99,7 @@ def main():
         agent = CoTAgent(config["model_name"], config["CoTCount"])
     elif config["test_type"] == "FineTuned":
         agent = FineTunedAgent(config["model_name"])
+
 
     last_error = ActionFeedback.SUCCESS
     while True:
@@ -131,13 +136,16 @@ def main():
 
         if action == "open":
             last_error = game.openCell(x, y)
+            ui.open_cell(x, y)
             if DEBUG_MODE:
                 print(last_error)
         
         if action == "flag":
             last_error = game.setFlag(x, y)
+            ui.toggle_flag(x, y)
             if DEBUG_MODE:
                 print(last_error)
+        input('press Enter to continue')
         
     print(f"Valid rate: {game.getValidRate()}")
     print(f"Average probability accurancy: {game.getAverageProbabilityAccurancy()}")

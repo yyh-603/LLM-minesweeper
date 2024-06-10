@@ -1,0 +1,5 @@
+REASON:
+The cell at (3, 2) has a "2," indicating there are 2 mines around it. The cells (2, 2), (3, 1), and (3, 3) are unopened, so the mines must be among these cells. Given the symmetry and that (2, 2) already shows a "1", one mine must be adjacent to it within the same column. 
+
+ACTION:
+flag 3 1

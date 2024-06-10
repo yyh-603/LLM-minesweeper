@@ -1,0 +1,5 @@
+REASON: The cell at (3, 2) has 2 neighboring mines, and there are two covered cells (3, 3) and (4, 2) around it. Based on the current board, it seems we don't have explicit information about the neighboring mines yet. Instead, let's take a safe move to clear more space around the cells with a number indication.
+
+Let's observe the cell at (4, 1) which has 1 neighboring mine. The surrounding covered cells are (4, 0), (4, 2), and (5, 1), but the only helpful cells nearby that might give us new information are already opened (4, 0) and (4, 1). We need more openings to get better clues. Opening the cells with 0 neighboring mines would be safe and open more clues.
+
+ACTION: open 4 2

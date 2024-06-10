@@ -11,6 +11,7 @@ class IncontextAgent(Agent):
         match = re.search(pattern, response, re.DOTALL)
         if match:
             ret = {
+                "response": response,
                 "reason": match.group("reason"),
                 "action": match.group("action"),
                 "x": int(match.group("x")),
@@ -18,7 +19,7 @@ class IncontextAgent(Agent):
             }
             return True, ret
         else:
-            return False, None
+            return False, {"response": response}
 
     def getAction(self, game: Game, falied_reason: ActionFeedback = ActionFeedback.SUCCESS):
         promptgen = IncontextPrompt()
@@ -36,6 +37,6 @@ class IncontextAgent(Agent):
 
         valid, response = self._process_response(response)
         if not valid:
-            return False, None, None
+            return False, None, None, response['response']
         else:
-            return True, response["action"], (response["x"], response["y"])
+            return True, response["action"], (response["x"], response["y"]), response['response']

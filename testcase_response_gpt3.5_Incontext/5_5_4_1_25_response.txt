@@ -1,0 +1,2 @@
+REASON: The cell at (0, 1) has 1 neighboring mine and the cell at (0, 0) has 1 neighboring mine, indicating that the remaining cells in the first row are safe to open. 
+ACTION: open 0 2

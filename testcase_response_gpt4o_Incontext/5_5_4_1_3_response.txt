@@ -1,0 +1,3 @@
+REASON: From the given table, the cell at (0, 3) has 1 neighboring mine, and only 1 neighboring cell is not opened. This implies that the mine must be at (1, 3). Therefore, we should flag the cell at (1, 3).
+
+ACTION: flag 1 3

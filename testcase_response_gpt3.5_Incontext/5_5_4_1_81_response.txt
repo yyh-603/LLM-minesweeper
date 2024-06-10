@@ -1,0 +1,2 @@
+REASON: The cell at (3, 2) already has 3 neighboring mines, and we know that there is only one more mine in the neighboring cells, we can safely flag the cell at (2, 2) as a mine.
+ACTION: flag 2 2
