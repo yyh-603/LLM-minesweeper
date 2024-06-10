@@ -134,8 +134,30 @@ class ProbabilityCalculator:
                         max_Y = y
         
         return (max_X, max_Y)
+    
+    def getMinProb(self):
+        minProb = 2
+        for x in range(self.height):
+            for y in range(self.width):
+                if not self.game.getCellIsOpen(x, y):
+                    minProb = min(minProb, self.prob[x][y])
+        return minProb
+    
+    def getMinProbPos(self):
+        minProb = 2
+        min_X = -1
+        min_Y = -1
+        for x in range(self.height):
+            for y in range(self.width):
+                if not self.game.getCellIsOpen(x, y):
+                    if self.prob[x][y] < minProb:
+                        minProb = self.prob[x][y]
+                        min_X = x
+                        min_Y = y
         
-        
+        return (min_X, min_Y)
+    
+    
     def _recur_count(self, mines_num, idx = 0):
         if idx == len(self.need_check_cell):
             
