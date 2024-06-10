@@ -1,4 +1,5 @@
 from game import Game
+import math
 import random
 
 '''
@@ -25,6 +26,7 @@ class ProbabilityCalculator:
         self.game: Game = game
         self.width = self.game.getWidth()
         self.height = self.game.getHeight()
+        self.mine_num = self.game.getMinesNum()
         self.current_mine_data = []
         self.need_check_cell = []
         self.no_touch_cell = []
@@ -32,6 +34,15 @@ class ProbabilityCalculator:
         self.current_have_mine = []
         self.total_state_num = 0
         self.cnt_not_open = 0
+        
+        self.num_of_cell = self.width * self.height
+        self.combination = [[0 for _ in range(self.mine_num + 1)] for _ in range(self.num_of_cell + 1)]
+        
+        for i in range(self.num_of_cell + 1):
+            self.combination[i][0] = 1
+            for j in range(1, self.mine_num + 1):
+                self.combination[i][j] = self.combination[i - 1][j] + self.combination[i - 1][j - 1]
+        
         self.run()
     
     def run(self):
@@ -54,10 +65,13 @@ class ProbabilityCalculator:
                     else:
                         self.no_touch_cell.append((x, y))
         
+        
         self.have_mine_count = [0 for _ in range(len(self.need_check_cell))]
         self.total_state_num = 0
         self.current_have_mine = [False for _ in range(len(self.need_check_cell))]
+        
         self._recur_count(self.game.getMinesNum())
+        
         
         if self.total_state_num == 0:
             raise ValueError(f'There are no any possible solution.\n{self.game.gridFormat()}')
@@ -80,9 +94,25 @@ class ProbabilityCalculator:
         maxProb = 0
         for x in range(self.height):
             for y in range(self.width):
-                maxProb = max(maxProb, self.prob[x][y])
+                if not self.game.getCellIsOpen(x, y):
+                    maxProb = max(maxProb, self.prob[x][y])
         return maxProb
     
+    def getMaxProbPos(self):
+        maxProb = -1
+        max_X = -1
+        max_Y = -1
+        for x in range(self.height):
+            for y in range(self.width):
+                if not self.game.getCellIsOpen(x, y):
+                    if self.prob[x][y] > maxProb:
+                        maxProb = self.prob[x][y]
+                        max_X = x
+                        max_Y = y
+        
+        return (max_X, max_Y)
+        
+        
     def _recur_count(self, mines_num, idx = 0):
         if idx == len(self.need_check_cell):
             
@@ -97,15 +127,15 @@ class ProbabilityCalculator:
                         return
             
             
+            self.total_state_num += self.combination[no_touch_size][left_mines]
             
-            self.total_state_num += 1
             for i in range(len(self.need_check_cell)):
                 if self.current_have_mine[i]:
                     x, y = self.need_check_cell[i]
-                    self.prob[x][y] += 1
+                    self.prob[x][y] += self.combination[no_touch_size][left_mines]
 
             for x, y in self.no_touch_cell:
-                self.prob[x][y] += left_mines / no_touch_size
+                self.prob[x][y] += left_mines / no_touch_size * self.combination[no_touch_size][left_mines]
             return
         #####
         
@@ -155,7 +185,7 @@ if __name__ == '__main__':
     
     game = Game(width, height, mine_num)
     game.generateMap()
-    for _ in range(5):
+    for _ in range(1):
         canOpenCell = []
         for x in range(game.height):
             for y in range(game.width):
@@ -170,7 +200,6 @@ if __name__ == '__main__':
     game.printMap()
     
     probabilityCalculator = ProbabilityCalculator(game)
-    probabilityCalculator.run()
     
     prob = probabilityCalculator.getAllProb()
     
@@ -179,3 +208,5 @@ if __name__ == '__main__':
             print(prob[x][y], end=' ')
         print()
     
+    print(probabilityCalculator.getMaxProb())
+    print(probabilityCalculator.getMaxProbPos())
