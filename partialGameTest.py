@@ -1,4 +1,3 @@
-from AnalysisGame import AnalysisGame
 from IncontextAgent import IncontextAgent
 from FineTunedAgent import FineTunedAgent
 from randomAgent import RandomAgent
@@ -30,31 +29,6 @@ def get_argument():
                         type=int,
                         required=False,
                         help="CoT count")
-    opt.add_argument("--height",
-                        type=int,
-                        required=False,
-                        help="height of the game",
-                        default=9)
-    opt.add_argument("--width",
-                        type=int,
-                        required=False,
-                        help="width of the game",
-                        default=9)
-    opt.add_argument("--mine_num",
-                        type=int,
-                        required=False,
-                        help="number of mines",
-                        default=10)
-    opt.add_argument("--format_error_threshold",
-                        type=int,
-                        required=False,
-                        help="format error threshold",
-                        default=5)
-    opt.add_argument("--logic_error_threshold",
-                        type=int,
-                        required=False,
-                        help="logic error threshold",
-                        default=5)
     opt.add_argument("--debug",
                         type=bool,
                         required=False,
@@ -71,11 +45,6 @@ def get_argument():
 
 def main():
     config = get_argument()
-    FORMAT_ERROR_THRESHOLD = config["format_error_threshold"]
-    LOGIC_ERROR_THRESHOLD = config["logic_error_threshold"]
-    GAME_WIDTH = config["width"]
-    GAME_HEIGHT = config["height"]
-    MINE_NUM = config["mine_num"]
     DEBUG_MODE = config["debug"]
     FIXED_SEED = config["fixed_seed"]
     
