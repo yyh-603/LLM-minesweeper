@@ -1,0 +1,48 @@
+------- 0th response -------
+Let's analyze the current Minesweeper board:
+
+```
+0 1 . 1 0 
+0 1 1 1 0 
+0 0 0 0 0 
+1 2 1 2 1 
+. . . . . 
+```
+
+### Step-by-Step Reasoning:
+
+1. **Cell (0,1)**: This cell indicates there is 1 mine in its adjacent cells. The possible cells with mines are (0,2). 
+
+2. **Cell (1,1)**: This cell also displays that there is 1 mine around it. The possible cells are (0,2).
+
+3. **Cell (3,1)**: Indicates there are 2 mines in the adjacent cells. The possible cells are (4,0), (4,2).
+
+4. **Cell (3,3)**: Indicates there are 2 mines in the adjacent cells. The possible cells are (4,2), (4,4).
+
+Based on clues and the surety of mine's positions, analyzing neighboring cells:
+- Cells (3,0), (3,4) confirms the un-mined and safe cells adjacent to the low number of mines count.
+
+It is reasonably safe to assume opening cells (3,2) which is not marked but likely in line with flagged/ unmined considerations.
+
+### Conclusion:
+
+REASON: Given the analysis above, opening cell (3,2) is the action guaranteeing the most surety of not hitting a mine. This is based on neighboring indirect clues confirming safety.
+
+ACTION: open 3 2
+------- 1th response -------
+CORRECTION REASON: The reasoning that opening cell (3,2) is safe is flawed. The cell at (3,2) is adjacent to cells that have neighboring mines, making it unsafe to deduce with certainty that it is not a mine.
+
+Consider another cell. The cell at (1,4) has no neighboring mines according to the numbers already visible, making it safe to open.
+
+CORRECTION ACTION: open 1 4
+------- 2th response -------
+**CORRECTION REASON:** The reasoning is still slightly incorrect. Opening cell (3,2) can be correct or incorrect depending on neighbouring cells.
+
+Consider the cells around (3,2):
+- The cell (3,1) has clue `2` and already touches two mines. 
+- The cell (3,3) has clue `2` and already touches two mines. 
+- Therefore, the cell (3,2) can be safely opened.
+
+Existing action is good, but let me check better action. Since row 3 opened cell already, it wise to open surrounding cell.
+
+**CORRECTION ACTION:** open 3 0

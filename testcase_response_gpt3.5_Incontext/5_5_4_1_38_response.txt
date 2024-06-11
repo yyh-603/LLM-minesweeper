@@ -1,0 +1,2 @@
+REASON: The cell at (2, 4) indicates there are 2 neighboring mines, and we know that one neighboring mine is at (2, 3). Thus, the remaining mine must be at (2, 5). This information allows us to safely open the cell at (2, 4).
+ACTION: open 2 4

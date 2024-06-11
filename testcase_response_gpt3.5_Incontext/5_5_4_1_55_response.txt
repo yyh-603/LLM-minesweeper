@@ -1,0 +1,2 @@
+REASON: In the row, we can see that the first two cells are already marked as flagged mines, and the last cell has a neighboring mine already. Therefore, according to the mine count and the cells that are already known, the cell at (3, 4) is safe to open.
+ACTION: open 3 4

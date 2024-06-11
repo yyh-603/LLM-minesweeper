@@ -1,0 +1,7 @@
+REASON: The cell at (2, 1) has 2 neighboring mines, and we know that the cells at (2, 0) and (3, 1) are opened and do not contain mines. The only covered cells around (2, 1) are (1, 1) and (2, 2).
+
+Additionally, the cell at (2, 3) has 2 neighboring mines, and we know that the cells at (2, 4), (3, 3), and (2, 2) are covered. Therefore, the cell at (2, 2) could be a potential mine.
+
+Given that (2, 2) is common between both hints and must be a mine, we should flag it to prevent accidental opening.
+
+ACTION: flag 2 2

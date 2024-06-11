@@ -1,0 +1,3 @@
+REASON: Given that the cell at (1, 3) has 1 neighboring mine, and all the neighboring cells are opened, we can deduce that the cell at (0, 3) is a mine since it has 2 neighboring mines. Thus, we should flag the cell at (0, 3) to avoid accidentally opening it.
+
+ACTION: flag 0 3

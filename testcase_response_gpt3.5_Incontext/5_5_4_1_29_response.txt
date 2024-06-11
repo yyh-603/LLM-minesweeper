@@ -1,0 +1,2 @@
+REASON: Looking at the cell at (1, 1) with value 3 and knowing that 3 of its neighboring cells are mines, we can flag the remaining neighboring cells as mines since all mines are already found.
+ACTION: flag 0 1

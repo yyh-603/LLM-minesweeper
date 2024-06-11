@@ -1,0 +1,2 @@
+REASON: The cell at (0, 2) has 1 neighboring mine and it already has 1 mine adjacent to it. Therefore, I can safely open the cell at (0, 3).
+ACTION: open 0 3

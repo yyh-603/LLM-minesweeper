@@ -1,0 +1,8 @@
+REASON: Let's analyze the board carefully. The cell at (0, 2) has 1 neighboring mine, and the cell at (1, 2) has 2 neighboring mines. We can sum up the potential mines around those cells. 
+- The cell (2, 1) has a 1 indicating there is only one mine among its neighboring cells.
+- The cell (1, 2) with a 2 gives a clear indication that there are two mines in the adjacent eight cells. We can infer from the cells already open around (1, 2) that the cells at (2, 2) and (2, 3) are likely to be the mines.
+Given that cell (1, 2) informs us there are two neighboring mines and only two cells (2, 2) and (2, 3) are left in the neighboring cells, both cells are flags.
+Therefore, flagging these cells is a safe bet.
+
+ACTION: flag 2 2
+ACTION: flag 2 3

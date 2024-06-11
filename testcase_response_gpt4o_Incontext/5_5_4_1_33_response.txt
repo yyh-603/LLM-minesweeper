@@ -1,0 +1,2 @@
+REASON: The cell at (0, 2) exposes a '0', meaning there are no mines around it. Given that, the adjacent cells (0, 0), (0, 1), (1, 0), and (1, 1) are all safe to open. Also there are not enough information to flag any mines.
+ACTION: open 0 0

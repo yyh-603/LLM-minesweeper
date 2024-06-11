@@ -1,0 +1,3 @@
+REASON: Looking at the table, we see that the cell at (1, 1) has a "2" which indicates two neighboring mines. The only covered cells adjacent to it are (0, 1), (0, 2), (1, 0), (1, 2), and (2, 1). Since there's an open "1" at (1, 2) with only one covered neighbor at (0, 2), we can surmise that (0, 2) is one of the mines. Another mine must be in one of the covered cells adjacent to (1, 1) remaining: (0, 1), (1, 0), or (2, 1). The number on (2, 1) is "1", with only its neighbor (1, 0) covered, telling us that (1, 0) is safe to open since (0, 2) and one adjacent cell to (1, 1) or (2, 1) are mines. I should flag (0, 2) and open (1, 0) first.
+
+ACTION: open 1 0

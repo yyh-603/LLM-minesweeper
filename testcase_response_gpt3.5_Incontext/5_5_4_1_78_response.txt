@@ -1,0 +1,2 @@
+REASON: The cell at (1, 2) has 1 neighboring mine, and all other neighboring cells are not opened. Therefore, we can deduce that the cell at (2, 3) is a mine.
+ACTION: flag 2 3

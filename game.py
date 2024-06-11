@@ -68,12 +68,11 @@ class Game:
             for i in range(self.height):
                 row = []
                 for j in range(self.width):
-                    cell = Cell(lines[i + self.height][j], isOpen = lines[i][j] != '.', hasFlag = lines[i][j] == 'F')
+                    cell = Cell(int(lines[i + self.height][j]), isOpen = lines[i][j] != '.', hasFlag = lines[i][j] == 'F')
                     if cell.data == -1:
                         self.minesNum += 1
                     row.append(cell)
                 self.map.append(row)
-                
 
     def generateMap(self):
         '''
@@ -314,13 +313,10 @@ class Game:
             print('Lose')
 
 if __name__ == '__main__':
-    mp = Game(9, 9, 10)
-    
-    print(mp.openCell(5, 5))
-    print(mp.gridFormat())
-    mp = Game(filename='incompleteMap\\8_10_10_5_3.txt')
+    mp = Game(filename='partial_unittest_data/9_9_10_1_0.txt')
     print(mp.gridFormat())
     data = mp.getAllData()
     for i in range(len(data)):
         for j in range(len(data[i])):
             print(data[i][j], end=(' ' if j != len(data[i]) - 1 else '\n'))
+    print(mp.openCell(0, 0))

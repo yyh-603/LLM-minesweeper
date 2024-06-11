@@ -1,0 +1,7 @@
+REASON: The cell at (1, 1) has a 3, meaning it has three neighboring mines. The only unopened neighbors of this cell are (0, 0), (0, 1), and (1, 0). Looking at cells (0, 0) and (1, 0), they must have mines since the count is three. Therefore, the cell (2, 1) which is adjacent to (1, 1) and currently unopened must also be one of those neighboring mines to satisfy the count.
+
+The cell (1, 2) has a 2, suggesting that it has two neighboring mines, with unopened neighbors (1, 0) and (2, 1). Since both are already considered mines, the adjacent unopened cells at (0, 1) and (0, 0) must be safe (since they don't increase an already satisfied neighboring count).
+
+Given these conditions, let's safely open the cell at (0, 2), as it is adjacent to only one opened cell marked with a 1.
+
+ACTION: open 0 2

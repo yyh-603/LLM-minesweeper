@@ -1,0 +1,3 @@
+REASON: The cell at (3, 3) has a 2, indicating it has two neighboring mines. Since there are only two covered cells next to it: (2, 3) and (4, 3), both of these cells must have the mines. Given that (2, 3) and (4, 3) are definitely mines, we can safely open the cell at (4, 4).
+
+ACTION: open 4 4

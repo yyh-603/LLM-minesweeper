@@ -1,0 +1,2 @@
+REASON: The cell at (2, 2) has 3 neighboring mines already, and all of its neighboring cells with mines are flagged. Therefore, the cell at (1, 3) must be the last mine adjacent to (2, 2).
+ACTION: flag 1 3

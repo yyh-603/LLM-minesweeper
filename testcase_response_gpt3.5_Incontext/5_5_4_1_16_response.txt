@@ -1,0 +1,2 @@
+REASON: The cell at (3, 0) has 1 neighboring mine, and the neighboring cells at (2, 0) and (2, 1) are already opened and have no mines around them. Therefore, the remaining neighboring cell at (3, 1) must be the mine. 
+ACTION: flag 3 1

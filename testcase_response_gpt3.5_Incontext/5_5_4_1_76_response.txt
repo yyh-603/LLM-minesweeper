@@ -1,0 +1,2 @@
+REASON: The cell at (2, 2) has 2 neighboring mines. Given this information, and the fact that the cell at (2, 3) has already been flagged as a mine, we can deduce that the cell at (2, 1) is safe to open since it cannot contain a mine.
+ACTION: open 2 1

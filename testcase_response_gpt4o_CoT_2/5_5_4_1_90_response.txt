@@ -1,0 +1,29 @@
+------- 0th response -------
+REASON: We can start by finding a cell with a definite inference about neighboring mines. Let's analyze the board.
+
+```
+. . 1 0 0 
+2 2 1 0 0 
+0 0 0 0 0 
+2 2 1 0 0 
+. . 1 0 0 
+```
+
+The cells (0, 2) and (0, 3) are already opened. The numbers help us identify the safe moves. Particularly, look at cell (1, 0) with '2'. It has two neighboring mines.
+
+We can infer:
+- Cells (0, 0), (0, 1), (1, 1), (2, 0), (2, 1) must be analyzed carefully.
+
+Looking at the surroundings:
+- Since (0, 2) and (1, 2) are '1', they have only one mine nearby:
+
+Given there are exactly 2 unexplored surfaces around (0,2):
+- Possible mines are: (0, 0), (0, 1)
+
+- For cell (1,1) flagged with 2, it clearly mentioned probability of one neighboring unexplored mines:
+- Cells (0,0) and/or (1,0) 
+
+Since there is two probability max serving requirement of flag,
+ACTION best suitable should be:-
+
+open 2 2

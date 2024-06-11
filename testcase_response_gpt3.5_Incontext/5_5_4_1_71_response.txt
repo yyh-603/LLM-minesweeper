@@ -1,0 +1,2 @@
+REASON: Because the cell at (4, 1) has 1 neighboring mine, and we already know that the cells at (4, 3) and (3, 4) are mines, we can infer that the cell at (3, 1) is also a mine. Therefore, I will flag the cell at (3, 1).
+ACTION: flag 3 1

@@ -51,6 +51,8 @@ def generateImcompleteMap(height: int, width: int, minesNum: int, randomSelectNu
     game = Game(height = height, width = width, minesNum = minesNum)
     
     for i in range(randomSelectNum):
+
+        print(f"test case {i}")
         
         foundNotOpen = False
         x = 0

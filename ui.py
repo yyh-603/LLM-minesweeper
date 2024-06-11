@@ -55,6 +55,6 @@ class MinesweeperUI:
 
 # Test
 if __name__ == "__main__":
-    game = Game(9, 9, 10)
+    game = Game(filename='partial_unittest_data/9_9_10_1_0.txt')
     ui = MinesweeperUI(game)
     ui.run()

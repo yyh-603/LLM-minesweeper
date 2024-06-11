@@ -1,0 +1,7 @@
+REASON: By observing the given board, the following information can be inferred:
+- The cell at (2, 2) has 3 neighboring mines. Given that the bottom and right cells around (2, 2) that are covered must be mines.
+- Hence, the cells at (1, 2) and (3, 2) must be mines, because (2, 2) already has 3 mines around it and only one cell left around it at top-right of the (3, 3) cell at (4, 2) is covered which should be safe to open.
+
+Therefore, the safe move would be to open a cell that is confirmed with no mine around it.
+
+ACTION: open 4 2

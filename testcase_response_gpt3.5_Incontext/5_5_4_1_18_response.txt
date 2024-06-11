@@ -1,0 +1,2 @@
+REASON: Considering the cell at (0, 2) has 1 neighboring mine, and the cells at (1, 0) and (2, 0) have no neighboring mines, we can deduce that the cells at (1, 1) and (2, 1) are mines. Therefore, it is safe to open the cell at (0, 4).
+ACTION: open 0 4

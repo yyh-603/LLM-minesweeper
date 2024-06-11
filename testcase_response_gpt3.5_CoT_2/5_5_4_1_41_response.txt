@@ -1,0 +1,9 @@
+------- 0th response -------
+REASON: The cell at (2, 2) has 1 neighboring mine, and we know that the cell at (2, 1) is a mine. Therefore, the cell at (3, 1) must have 1 neighboring mine as well. 
+ACTION: flag 3 1
+------- 1th response -------
+CORRECTION REASON: The existing reason is valid. The cell at (2, 2) has 1 neighboring mine, and we know that the cell at (2, 1) is a mine. Therefore, the cell at (3, 1) must have 1 neighboring mine as well.
+CORRECTION ACTION: flag 3 1
+------- 2th response -------
+CORRECTION REASON: The existing reason is valid. The cell at (2, 2) has 1 neighboring mine, and we know that the cell at (2, 1) is a mine. Therefore, the cell at (3, 1) must have 1 neighboring mine as well.
+CORRECTION ACTION: flag 3 1

@@ -1,0 +1,4 @@
+REASON: The cell at (1, 4) is covered but the surrounding cells (2, 3) have a 1, meaning there's exactly one mine surrounding it. All other neighboring cells (1, 3), (0, 4), (2, 4) do not have any mines (either they show 1 or are opened) and we don't have any cover that can cover other place.
+So it's safe to open it.
+
+ACTION: open 1 4

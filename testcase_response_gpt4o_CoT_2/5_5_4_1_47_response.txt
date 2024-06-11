@@ -1,0 +1,19 @@
+------- 0th response -------
+REASON: 
+Given the current table:
+```
+. . . . . 
+. . . . . 
+1 2 . . . 
+0 1 . . . 
+0 1 . . . 
+```
+We notice that the cell at (2, 1) has value 2, indicating there are 2 mines in its adjacent cells. The only covered cells adjacent to (2, 1) are (2, 2) and (1, 2). Therefore, both of these cells must contain mines. First, we will flag one of these cells.
+
+ACTION: flag 2 2
+------- 1th response -------
+CORRECTION REASON:
+The existing reason is sound. The cell at (2, 1) indeed has a '2', indicating that there are exactly 2 mines in its adjacent cells. Since the only covered cells adjacent to (2, 1) are (2, 2) and (1, 2), both of these cells must contain mines. Hence, the proposed action to flag one of these cells is correct.
+
+CORRECTION ACTION:
+flag 2 2

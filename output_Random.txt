@@ -1,0 +1,15 @@
+model: 123
+test_type: Random
+Total test case: 100
+Valid action count: 100
+Format error count: 0
+Logic error count: 0
+Zero count: 20
+Not zero count: 80
+---------------------------------
+Valid rate: 1.0
+Format Error rate: 0.0
+Logic Error rate: 0.0
+Failed rate: 0.2
+Success rate: 0.8
+Average probability: 0.5474620588928948

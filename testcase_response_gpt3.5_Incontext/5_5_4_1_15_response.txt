@@ -1,0 +1,2 @@
+REASON: In the current state, the cell at (2, 0) has 1 neighboring mine, and the cell at (3, 0) is already opened and has no neighboring mines. Thus, we can safely open the cell at (4, 0).
+ACTION: open 4 0

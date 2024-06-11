@@ -1,0 +1,5 @@
+REASON: The cell at (2, 2) has 2 neighboring mines, and only 2 neighboring cells [(1, 3), (2, 3)] are not opened. Therefore, we can flag both these cells as mines.
+
+ACTION: flag 1 3
+
+Once you submit this action, please proceed with flagging the other mine at (2, 3) if this was successful.

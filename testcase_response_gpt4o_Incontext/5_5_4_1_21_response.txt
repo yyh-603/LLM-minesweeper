@@ -1,0 +1,9 @@
+**REASON:** The cell at (3, 3) has 1 neighboring mine, and currently there are no flagged neighboring cells. However, we have a known number pattern around (2, 3):
+- (2, 3) has a number 2, and we see 2 covered cells around it.
+- Since (2, 3) must be touching exactly 2 mines and it only has two covered neighbors which are (1, 2) and (1, 4), we can be sure both these cells should contain mines.
+
+Thus, we should flag those cells at (1, 2) and (2, 1) as mines.
+
+**ACTION:** 
+1. flag 2 4
+2. flag 2 2

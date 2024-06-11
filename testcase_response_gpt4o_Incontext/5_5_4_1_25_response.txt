@@ -1,0 +1,6 @@
+REASON: 
+The cell at (1, 1) has 2 neighboring mines, and currently there are two covered neighboring cells at (0, 0), (0, 1), (0, 2), (1, 2), and (2, 2). This implies two of those cells contain mines. However, both (1, 2) and (2, 2) already display a ¡§2¡¨, which indicates they each have exactly two mines in their vicinity. The only two choices left for these mines are places: (0, 1) and (0, 2).
+
+- Since there must be two mines around cell (0, 1) neighboring cell (1, 1) which has a 2, (1, 2) and (2, 2) being not mine safe to open. Thus revealing (0, 0) must be empty given that around (1, 1) there is already both mines conditions satisfied.
+
+ACTION: open 0 0

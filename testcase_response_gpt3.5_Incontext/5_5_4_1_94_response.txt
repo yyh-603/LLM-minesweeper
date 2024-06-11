@@ -1,0 +1,2 @@
+REASON: The cell at (2, 2) has only one neighboring covered cell, and it has 1 neighboring mine. Since all other cells around (2, 2) are revealed and do not have any neighboring mines, we can deduce that the neighboring covered cell at (1, 3) must be a mine.
+ACTION: flag 1 3

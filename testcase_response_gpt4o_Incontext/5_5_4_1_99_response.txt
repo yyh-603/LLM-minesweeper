@@ -1,0 +1,3 @@
+REASON: The cell at (4, 2) has 0 neighboring mines, which means all its neighboring cells must be safe to open. Since (4, 2) is an empty cell, opening it will also reveal all of its neighboring cells recursively, helping us to uncover a larger part of the board safely.
+
+ACTION: open 4 2

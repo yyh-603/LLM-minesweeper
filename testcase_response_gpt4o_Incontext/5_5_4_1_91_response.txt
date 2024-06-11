@@ -1,0 +1,5 @@
+REASON: The cell at (4, 3) has 1 neighboring mine, and given the current state, this implies the mine is either at (3, 4) or (4, 4). However, the top right cell (1, 4) also has a neighbor with mine, which restricts the probable mines' location to (4, 4).
+
+Thus, I can confidently flag the cell at (4, 4).
+
+ACTION: flag 4 4

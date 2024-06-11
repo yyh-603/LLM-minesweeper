@@ -1,0 +1,3 @@
+REASON: The cell at (2, 2) has 1 neighboring mine, and three of its neighboring cells (1, 2), (2, 1), and (3, 2) are still covered. Since there are no revealed mines near (1, 2) and assuming the simplest scenario, I'll flag one of the covered cells around (2, 2). The other cells around are less certain without further information.
+
+ACTION: flag 1 2

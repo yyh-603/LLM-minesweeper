@@ -1,0 +1,2 @@
+REASON: There are two covered cells adjacent to the opened cell at (3, 4) that have a total of 2 neighboring mines. Since the covered cell at (4, 4) already has 1 neighboring mine, we can determine that the covered cell at (4, 3) is safe to open.
+ACTION: open 4 3
