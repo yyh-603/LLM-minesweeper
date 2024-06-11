@@ -8,7 +8,6 @@ from probability import ProbabilityCalculator
 import argparse
 import random
 import math
-import os
 
 def get_argument():
     opt = argparse.ArgumentParser()

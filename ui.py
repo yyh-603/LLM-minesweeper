@@ -1,10 +1,17 @@
 import tkinter as tk
 from game import Game
+from IncontextAgent import IncontextAgent
+from FineTunedAgent import FineTunedAgent
+from CoTAgent import CoTAgent
 from randomAgent import RandomAgent
+import time
+from agent import Agent
+import argparse
 
 class MinesweeperUI:
-    def __init__(self, game: Game):
+    def __init__(self, game: Game, agent: Agent):
         self.game = game  # The game instance
+        self.agent = agent  # The agent instance
         self.window = tk.Tk()  # The main window
         self.window.title("Minesweeper")  # Set the window title
         # Initialize the buttons matrix
@@ -12,64 +19,83 @@ class MinesweeperUI:
         # Create the buttons and add them to the window
         for i in range(game.getHeight()):
             for j in range(game.getWidth()):
-                self.buttons[i][j] = tk.Button(self.window, command=lambda x=i, y=j: self.open_cell(x, y), width=2, height=1)
+                self.buttons[i][j] = tk.Label(self.window, width=2, height=1)
                 self.buttons[i][j].grid(row=i, column=j)
-        
-        # Bind the right click event to the toggle_flag method
-        for i in range(game.getHeight()):
-            for j in range(game.getWidth()):
-                self.buttons[i][j].bind('<Button-3>', lambda event, x=i, y=j: self.toggle_flag(x, y))
-
-    def open_cell(self, x, y):
-        self.game.openCell(x, y)  # Open the cell in the game
-        self.update_buttons()  # Update the buttons' states
-        # Check if the game is won or lost
-        if self.game.checkWin():
-            print("You win!")
-        elif self.game.checkLose():
-            print("You lose!")
-    
-    def toggle_flag(self, x, y):
-        # Toggle the flag of the cell in the game
-        self.game.setFlag(x, y)
-        self.update_buttons()  # Update the buttons' states
 
     def update_buttons(self):
-        # Update the text and state of each button based on the game's state
         for i in range(self.game.getHeight()):
             for j in range(self.game.getWidth()):
                 if self.game.getCellIsOpen(i, j):
-                    if self.game.getCellData(i, j) == -1:
-                        self.buttons[i][j].config(text="X", state="disabled")
+                    # If the cell is open, set the label's text to the number of mines around the cell
+                    data = self.game.getCellData(i, j)
+                    if data == -1:
+                        self.buttons[i][j]['text'] = 'X'
                     else:
-                        self.buttons[i][j].config(text=str(self.game.getCellData(i, j)), state="disabled")
-
+                        self.buttons[i][j]['text'] = str(self.game.getCellData(i, j))
                 elif self.game.getCellHasFlag(i, j):
-                    self.buttons[i][j].config(text="F")
-                
+                    self.buttons[i][j]['text'] = 'F'
                 else:
-                    self.buttons[i][j].config(text="", state="normal")
-        self.game.printMap()  # Print the game's map to the console
-
-    def process_action(self, action, x, y):
+                    # If the cell is not open, clear the label's text
+                    self.buttons[i][j]['text'] = ''
+        if self.game.checkWin():
+            print('You win!')
+            input("Press Enter to continue...")
+            self.window.destroy()
+            return
+        elif self.game.checkLose():
+            print('You lose!')
+            input("Press Enter to continue...")
+            self.window.destroy()
+            return
+        _, action, (x, y), _ = self.agent.getAction(self.game)
         if action == "open":
-            self.open_cell(x, y)
+            self.game.openCell(x, y)
         elif action == "flag":
-            self.toggle_flag(x, y)
+            self.game.setFlag(x, y)
 
     def run(self):
-        agent = RandomAgent()
-        while not self.game.checkWin() and not self.game.checkLose():
-            _, action, (x, y), _ = agent.getAction(self.game)
-            self.process_action("flag", x, y)
-            print(x, y)
-            self.update_buttons()  # Update the buttons' states
-            self.window.after(3000, self.run)
-            self.window.mainloop()  # Start the main loop
+        self.update_buttons()  # Update the labels immediately
+        self.window.after(1000, self.run)  # Schedule the next update in 1 second
+        self.window.mainloop()  # Start the Tkinter event loop
 
-# Test
-if __name__ == "__main__":
-    game = Game(filename='partial_unittest_data/9_9_10_1_0.txt')  # Create a game instance
-    ui = MinesweeperUI(game)  # Create a UI instance
-    ui.run()  # Start the UI
+def get_argument():
+    opt = argparse.ArgumentParser()
+    opt.add_argument("--model_name",
+                        type=str,
+                        required=True,
+                        help="model name")
+    opt.add_argument("--test_type",
+                        type=str,
+                        choices=['Incontext', 'FineTuned', 'CoT', 'Random'],
+                        required=True,
+                        help="test type")
+    opt.add_argument("--file_path",
+                        type=str,
+                        required=True,
+                        help="map file path")
+    opt.add_argument("--CoTCount",
+                        type=int,
+                        required=False,
+                        help="CoT count")
+    opt.add_argument("--fixed-seed",
+                        type=bool,
+                        required=False,
+                        help="fixed seed",
+                        default=False)                     
     
+    config = vars(opt.parse_args())
+    return config
+
+if __name__ == "__main__":
+    config = get_argument()
+    game = Game(filename=config["file_path"])  # Create a game instance
+    if config['test_type'] == "Incontext":
+        agent = IncontextAgent(config["model_name"])
+    elif config['test_type'] == "FineTuned":
+        agent = FineTunedAgent(config["model_name"])
+    elif config['test_type'] == "CoT":
+        agent = CoTAgent(config["model_name"], config["CoTCount"])
+    elif config['test_type'] == "Random":
+        agent = RandomAgent()
+    ui = MinesweeperUI(game, agent)  # Create a UI instance
+    ui.run()  # Start the UI
