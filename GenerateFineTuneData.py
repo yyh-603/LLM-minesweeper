@@ -9,23 +9,28 @@ from generateTestcase import generateImcompleteMap
 
 import jsonlines
 
+import tqdm
+
 # return one line of 
 class FineTuneDataGenerator:
     def __init__(self):
         self.promptGen = FineTunedPrompt()
         
         
-    def generateFineTuneData_open(self, height: int, width: int, minesNum: int, ResultOfAction: ActionFeedback, randomSelectNum: int = 5):
+    def generateFineTuneData_open(self, height: int, width: int, minesNum: int, ResultOfAction: ActionFeedback, randomSelectNum: int):
         x = -1
         y = -1
         game = generateImcompleteMap(height, width, minesNum, randomSelectNum)
         found_valid_case = False
+        weight = 0
         while not found_valid_case:
             if ResultOfAction == ActionFeedback.SUCCESS:
                 probabilityCalculator = ProbabilityCalculator(game)
                 x, y = probabilityCalculator.getMaxProbPos()
                 if x != -1 and y != -1:
                     found_valid_case = True
+                    weight = 1
+
             elif ResultOfAction == ActionFeedback.INVALID_CELL:
                 x = random.randint(0, height - 1)
                 y = random.randint(0, width - 1)
@@ -63,6 +68,9 @@ class FineTuneDataGenerator:
                     found_valid_case = True
             else:
                 raise ValueError('the ResultOfAction is invalid')
+
+            if not found_valid_case:
+                game = generateImcompleteMap(height, width, minesNum, randomSelectNum)
         
         system_message = self.promptGen.system_message()
         
@@ -72,24 +80,37 @@ class FineTuneDataGenerator:
         user_message += self.promptGen.intro_actions()
         user_message += self.promptGen.action_format()
         user_message += self.promptGen.regulation()
-        user_message += self.promptGen.response_guide(game, ResultOfAction)
         
         assistant_message = f'open {x} {y}'
         
+        returnObj = {"messages": [
+            {"role": "system", "content": system_message},
+            {"role": "user", "content": user_message + self.promptGen.response_guide(game, ActionFeedback.SUCCESS)}, 
+            {"role": "assistant", "content": assistant_message, "weight": weight}
+            ]}
         
-        return {"system": system_message, "user": user_message, "assistant": assistant_message}
+        if ResultOfAction != ActionFeedback.SUCCESS:
+            probabilityCalculator = ProbabilityCalculator(game)
+            ans_x, ans_y = probabilityCalculator.getMaxProbPos()
+            returnObj["messages"].append({"role": "user", "content": user_message + self.promptGen.response_guide(game, ResultOfAction)})
+            returnObj["messages"].append({"role": "assistant", "content": f'open {ans_x} {ans_y}', "weight": 1})
+        return returnObj
 
     def generateFineTuneData_flag(self, height: int, width: int, minesNum: int, ResultOfAction: ActionFeedback, randomSelectNum: int = 5):
         x = -1
         y = -1
         game = generateImcompleteMap(height, width, minesNum, randomSelectNum)
         found_valid_case = False
+        weight = 0
+        
         while not found_valid_case:
             if ResultOfAction == ActionFeedback.SUCCESS:
                 probabilityCalculator = ProbabilityCalculator(game)
                 x, y = probabilityCalculator.getMinProbPos()
-                if x != -1 and y != -1:
+                if x != -1 and y != -1 and abs(probabilityCalculator.getMinProb()) < 1e-6:
                     found_valid_case = True
+                    weight = 1
+                    
             elif ResultOfAction == ActionFeedback.INVALID_CELL:
                 x = random.randint(0, height - 1)
                 y = random.randint(0, width - 1)
@@ -131,16 +152,32 @@ class FineTuneDataGenerator:
         
         assistant_message = f'flag {x} {y}'
         
-        return {"system": system_message, "user": user_message, "assistant": assistant_message}
+        returnObj = {"messages": [
+            {"role": "system", "content": system_message},
+            {"role": "user", "content": user_message + self.promptGen.response_guide(game, ActionFeedback.SUCCESS)}, 
+            {"role": "assistant", "content": assistant_message, "weight": weight}
+            ]}
+        if ResultOfAction != ActionFeedback.SUCCESS:
+            probabilityCalculator = ProbabilityCalculator(game)
+            ans_x, ans_y = probabilityCalculator.getMinProbPos()
+            returnObj["messages"].append({"role": "user", "content": user_message + self.promptGen.response_guide(game, ResultOfAction)})
+            returnObj["messages"].append({"role": "assistant", "content": f'open {ans_x} {ans_y}', "weight": 1})
+        
+        return returnObj
 
 if __name__ == '__main__':
     fineTuneDataGenerator = FineTuneDataGenerator()
     
-    with jsonlines.open('test.jsonl', 'w') as writer:
-        for i in range(6):
-            writer.write(fineTuneDataGenerator.generateFineTuneData_open(5, 5, 5, ActionFeedback.SUCCESS))
-
-        writer.write(fineTuneDataGenerator.generateFineTuneData_open(5, 5, 5, ActionFeedback.INVALID_CELL))
-        writer.write(fineTuneDataGenerator.generateFineTuneData_open(5, 5, 5, ActionFeedback.OPEN_FLAGGED_CELL))
-        writer.write(fineTuneDataGenerator.generateFineTuneData_open(5, 5, 5, ActionFeedback.OPEN_NUMBER_CELL))
-        writer.write(fineTuneDataGenerator.generateFineTuneData_flag(5, 5, 5, ActionFeedback.FLAG_NUMBER_CELL))
+    with jsonlines.open('FineTuneData50.jsonl', 'w') as writer:
+        for i in tqdm.tqdm(range(30)):
+            writer.write(fineTuneDataGenerator.generateFineTuneData_open(5, 5, 4, ActionFeedback.SUCCESS, 1))
+        
+        for i in range(10):
+            writer.write(fineTuneDataGenerator.generateFineTuneData_flag(5, 5, 4, ActionFeedback.SUCCESS, 1))
+        
+        for i in range(2):
+            writer.write(fineTuneDataGenerator.generateFineTuneData_open(5, 5, 4, ActionFeedback.INVALID_CELL, 1))
+            writer.write(fineTuneDataGenerator.generateFineTuneData_open(5, 5, 4, ActionFeedback.OPEN_FLAGGED_CELL, 1))
+            writer.write(fineTuneDataGenerator.generateFineTuneData_open(5, 5, 4, ActionFeedback.OPEN_NUMBER_CELL, 1))
+            writer.write(fineTuneDataGenerator.generateFineTuneData_flag(5, 5, 4, ActionFeedback.FLAG_NUMBER_CELL, 1))
+            writer.write(fineTuneDataGenerator.generateFineTuneData_flag(5, 5, 4, ActionFeedback.INVALID_CELL, 1))
